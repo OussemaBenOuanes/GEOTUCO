@@ -28,8 +28,9 @@ const services = {
   }
 };
 
-export default function DynamicPage({ params }: { params: { slug: string } }) {
-  const service = services[params.slug];
+export default async function DynamicPage({ params }: { params: { slug: string } }) {
+  const { slug } = await params;
+  const service = services[slug];
   if (!service) return notFound();
 
   return (
