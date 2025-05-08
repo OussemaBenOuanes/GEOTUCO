@@ -28,7 +28,7 @@ const services = {
   }
 };
 
-export default async function DynamicPage({ params }: { params: { slug: string } }) {
+export default async function DynamicPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const service = services[slug];
   if (!service) return notFound();
