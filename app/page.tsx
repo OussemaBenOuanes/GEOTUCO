@@ -21,14 +21,11 @@ export default function Home() {
       <section style={{
         position: 'relative',
         background: 'linear-gradient(90deg, #e3ecfa 60%, #c7e0f4 100%)',
-        padding: '3rem 0 2rem 0',
+        padding: '3rem 0 5rem 0',
         overflow: 'hidden'
       }}>
         {/* Curved accent */}
-        <svg width="100%" height="80" viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg"
-          style={{ position: 'absolute', bottom: 0, left: 0, zIndex: 1 }}>
-          <path d="M0,40 Q720,120 1440,40 L1440,80 L0,80 Z" fill="#fff" />
-        </svg>
+
         <div style={{
           position: 'relative',
           zIndex: 2,
