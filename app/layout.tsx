@@ -1,3 +1,5 @@
+import React from "react";
+import { FloatingWhatsApp } from "react-floating-whatsapp";
 import './globals.css';
 
 export const metadata = {
@@ -8,6 +10,7 @@ export const metadata = {
 import Navbar from '../components/Navbar';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import Footer from '../components/Footer';
+import FloatingWhatsAppGlobal from '../components/FloatingWhatsAppGlobal';
 
 export default function RootLayout({
   children,
@@ -21,7 +24,8 @@ export default function RootLayout({
         {children}
         <Footer />
         <SpeedInsights />
+        <FloatingWhatsAppGlobal />
       </body>
     </html>
-  )
+  );
 }
