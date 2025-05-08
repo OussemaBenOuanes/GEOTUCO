@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
 import useEmblaCarousel from 'embla-carousel-react';
 import Head from 'next/head'; // Add this import
+import { FloatingWhatsApp } from 'react-floating-whatsapp';
 import { testimonials } from './constants/testimonials';
 import { carouselImages } from './constants/carouselImages';
 import { services } from './constants/services';
@@ -31,6 +32,17 @@ export default function Home() {
   const scrollTo = useCallback((idx: number) => {
     if (emblaApi) emblaApi.scrollTo(idx);
   }, [emblaApi]);
+
+  // Custom handler for FloatingWhatsApp button click
+  const handleWhatsAppClick = (e: React.MouseEvent) => {
+    if (typeof window !== "undefined" && window.innerWidth <= 768) {
+      // On mobile, redirect to WhatsApp chat link
+      window.open("https://wa.me/21671712233", "_blank");
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    // On desktop, let FloatingWhatsApp handle it
+  };
 
   return (
     <>
@@ -266,6 +278,21 @@ export default function Home() {
           &copy; {new Date().getFullYear()} GEOTUCO | GeoTunisie Consulting
         </footer> */}
       </main>
+      <FloatingWhatsApp
+        phoneNumber="+21671712233"
+        accountName="GEOTUCO"
+        avatar="https://img.freepik.com/free-psd/3d-illustration-person-with-glasses_23-2149436189.jpg?semt=ais_hybrid&w=740"
+        statusMessage="Typically replies within 1 hour"
+        chatMessage="Hello there! 👋 How can we help you?"
+        placeholder="Type your message.."
+        allowEsc
+        allowClickAway
+        notification
+        notificationDelay={30}
+        notificationSound
+        buttonStyle={{ boxShadow: 'none' }}
+        onClick={handleWhatsAppClick}
+      />
     </>
   );
 }
