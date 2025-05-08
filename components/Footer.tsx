@@ -8,7 +8,7 @@ export default function Footer() {
       <div className="max-w-6xl mx-auto px-4 py-10">
         <div className="flex flex-col md:flex-row md:justify-between gap-8">
           {/* Left section */}
-          <div className="flex-1 min-w-[220px]">
+          <div className="flex-1 min-w-[220px] mb-8 md:mb-0">
             <div className="flex items-center gap-2 mb-2">
               {/* Logo placeholder */}
               <span className="font-extrabold text-xl text-blue-900">GEOTUCO</span>
@@ -32,7 +32,7 @@ export default function Footer() {
             </div>
           </div>
           {/* Links section */}
-          <div className="flex-1 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6 text-sm">
+          <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 text-sm">
             <div>
               <div className="font-semibold text-gray-700 mb-2">Product</div>
               <ul className="space-y-1">
@@ -69,11 +69,11 @@ export default function Footer() {
           </div>
         </div>
         {/* Bottom bar */}
-        <div className="border-t border-gray-100 mt-8 pt-6 flex flex-col md:flex-row md:justify-between items-center text-xs text-gray-400">
-          <div className="mb-2 md:mb-0">
+        <div className="border-t border-gray-100 mt-8 pt-6 flex flex-col md:flex-row md:justify-between items-center text-xs text-gray-400 gap-2">
+          <div className="mb-2 md:mb-0 text-center">
             &copy; {new Date().getFullYear()} GEOTUCO — GeoTunisie Consulting
           </div>
-          <div className="flex gap-4">
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 items-center">
             <Link href="#" className="hover:text-blue-700">Privacy Policy</Link>
             <Link href="#" className="hover:text-blue-700">Terms</Link>
             <Link href="#" className="hover:text-blue-700">Code of Conduct</Link>

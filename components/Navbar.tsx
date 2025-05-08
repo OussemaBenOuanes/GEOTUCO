@@ -1,5 +1,5 @@
 "use client";
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 
 // Define navbar pages for dynamic rendering
@@ -12,6 +12,8 @@ const NAV_PAGES = [
 ];
 
 export default function Navbar() {
+  const [menuOpen, setMenuOpen] = useState(false);
+
   return (
     <nav className="w-full bg-white shadow-md sticky top-0 z-10">
       <div className="max-w-[1100px] mx-auto flex items-center justify-between px-4 md:px-8 py-3">
@@ -26,8 +28,25 @@ export default function Navbar() {
             />
           </Link>
         </div>
+        {/* Hamburger Icon */}
+        <button
+          className="md:hidden flex items-center px-2 py-1 rounded text-[#189ab4] focus:outline-none"
+          onClick={() => setMenuOpen((v) => !v)}
+          aria-label="Toggle navigation menu"
+        >
+          <svg width="28" height="28" fill="none" viewBox="0 0 24 24">
+            <path
+              d={menuOpen
+                ? "M6 18L18 6M6 6l12 12"
+                : "M3 6h18M3 12h18M3 18h18"}
+              stroke="#189ab4"
+              strokeWidth="2"
+              strokeLinecap="round"
+            />
+          </svg>
+        </button>
         {/* Navigation Links */}
-        <div className="flex gap-8 items-center">
+        <div className="hidden md:flex gap-8 items-center">
           {NAV_PAGES.map(({ label, slug }) => (
             <Link
               key={label}
@@ -45,12 +64,41 @@ export default function Navbar() {
         {/* Get Started Button */}
         <Link
           href="/get-started"
-          className="bg-[#189ab4] text-white font-bold px-6 py-2 rounded-lg hover:bg-[#1687a7] transition-colors"
+          className="hidden md:inline-block bg-[#189ab4] text-white font-bold px-6 py-2 rounded-lg hover:bg-[#1687a7] transition-colors"
           style={{ boxShadow: '0 1px 2px rgba(0,0,0,0.04)' }}
         >
           Get started
         </Link>
       </div>
+      {/* Mobile Menu */}
+      {menuOpen && (
+        <div className="md:hidden bg-white border-t border-gray-100 px-4 pb-4">
+          <div className="flex flex-col gap-3 mt-2">
+            {NAV_PAGES.map(({ label, slug }) => (
+              <Link
+                key={label}
+                href={slug ? `/${slug}` : '/'}
+                className={
+                  label === "Home"
+                    ? "text-[#189ab4] font-medium"
+                    : "text-[#495867] font-medium"
+                }
+                onClick={() => setMenuOpen(false)}
+              >
+                {label}
+              </Link>
+            ))}
+            <Link
+              href="/get-started"
+              className="bg-[#189ab4] text-white font-bold px-6 py-2 rounded-lg hover:bg-[#1687a7] transition-colors mt-2 text-center"
+              style={{ boxShadow: '0 1px 2px rgba(0,0,0,0.04)' }}
+              onClick={() => setMenuOpen(false)}
+            >
+              Get started
+            </Link>
+          </div>
+        </div>
+      )}
     </nav>
   );
 }
