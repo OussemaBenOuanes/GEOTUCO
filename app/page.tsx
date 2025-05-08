@@ -1,6 +1,7 @@
-import React from 'react';
+"use client";
+import React, { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
-// import { Button } from "@/components/ui/button";
+import useEmblaCarousel from 'embla-carousel-react';
 
 // Dummy testimonials data
 const testimonials = [
@@ -15,17 +16,128 @@ const testimonials = [
 ];
 
 export default function Home() {
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
+  const [selectedIndex, setSelectedIndex] = useState(0);
+
+  // Unsplash image URLs for the carousel
+  const carouselImages = [
+    "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=900&q=80",
+    "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=900&q=80",
+    "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?auto=format&fit=crop&w=900&q=80",
+    "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=900&q=80",
+    "https://images.unsplash.com/photo-1468421870903-4df1664ac249?auto=format&fit=crop&w=900&q=80",
+    "https://images.unsplash.com/photo-1432888498266-38ffec3eaf0a?auto=format&fit=crop&w=900&q=80",
+    "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=900&q=80",
+    "https://images.unsplash.com/photo-1464037866556-6812c9d1c72e?auto=format&fit=crop&w=900&q=80"
+  ];
+
+  // Update selected index on slide change
+  const onSelect = useCallback(() => {
+    if (!emblaApi) return;
+    setSelectedIndex(emblaApi.selectedScrollSnap());
+  }, [emblaApi]);
+
+  // Listen to carousel events
+  useEffect(() => {
+    if (!emblaApi) return;
+    onSelect();
+    emblaApi.on('select', onSelect);
+    return () => {
+      emblaApi.off('select', onSelect);
+    };
+  }, [emblaApi, onSelect]);
+
+  // Scroll to slide when dot is clicked
+  const scrollTo = useCallback((idx: number) => {
+    if (emblaApi) emblaApi.scrollTo(idx);
+  }, [emblaApi]);
+
   return (
     <main style={{ fontFamily: 'Inter, sans-serif', background: '#f7f9fa', minHeight: '100vh' }}>
+      {/* Embla Carousel - moved outside Hero Section */}
+      <div
+        className="embla"
+        ref={emblaRef}
+        style={{
+          maxWidth: 900,
+          margin: '2rem auto 2.5rem auto', // Added bottom margin for spacing
+          width: '100%'
+        }}
+      >
+        <div
+          className="embla__container"
+          style={{
+            display: 'flex'
+          }}
+        >
+          {carouselImages.map((src, idx) => (
+            <div
+              className="embla__slide"
+              key={idx}
+              style={{
+                flex: '0 0 80%',
+                minWidth: 0,
+                padding: '0 8px', // Add horizontal padding to each slide
+                background: '#e3ecfa',
+                borderRadius: 12,
+                overflow: 'hidden',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                height: 320
+              }}
+            >
+              <img
+                src={src}
+                alt={`Carousel ${idx + 1}`}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  borderRadius: 12,
+                  display: 'block'
+                }}
+              />
+            </div>
+          ))}
+        </div>
+        {/* Carousel Dots */}
+        <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          gap: 8,
+          marginTop: 16
+        }}>
+          {carouselImages.map((_, idx) => (
+            <button
+              key={idx}
+              type="button"
+              onClick={() => scrollTo(idx)}
+              style={{
+                width: 12,
+                height: 12,
+                borderRadius: '50%',
+                border: 'none',
+                background: selectedIndex === idx ? '#4b86b4' : '#c7e0f4',
+                transition: 'background 0.2s',
+                cursor: 'pointer',
+                outline: 'none',
+                boxShadow: selectedIndex === idx ? '0 0 0 2px #4b86b433' : undefined,
+                padding: 0
+              }}
+              aria-label={`Go to slide ${idx + 1}`}
+            />
+          ))}
+        </div>
+      </div>
       {/* Hero Section */}
       <section style={{
         position: 'relative',
         background: 'linear-gradient(90deg, #e3ecfa 60%, #c7e0f4 100%)',
-        padding: '3rem 0 5rem 0',
+        padding: '4rem 0 5rem 0', // Increased top padding for more space
         overflow: 'hidden'
       }}>
         {/* Curved accent */}
-
         <div style={{
           position: 'relative',
           zIndex: 2,
