@@ -168,7 +168,7 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer style={{
+      {/* <footer style={{
         textAlign: 'center',
         marginTop: '2rem',
         color: '#888',
@@ -176,7 +176,7 @@ export default function Home() {
         padding: '2rem 0 1rem 0'
       }}>
         &copy; {new Date().getFullYear()} GEOTUCO | GeoTunisie Consulting
-      </footer>
+      </footer> */}
     </main>
   );
 }

@@ -1,3 +1,5 @@
+import './globals.css';
+
 export const metadata = {
   title: 'GEOTUCO',
   description: 'GeoTunisie Consulting',
@@ -5,6 +7,7 @@ export const metadata = {
 
 import Navbar from '../components/Navbar';
 import { SpeedInsights } from '@vercel/speed-insights/next';
+import Footer from '../components/Footer';
 
 export default function RootLayout({
   children,
@@ -16,6 +19,7 @@ export default function RootLayout({
       <body>
         <Navbar />
         {children}
+        <Footer />
         <SpeedInsights />
       </body>
     </html>
