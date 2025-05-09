@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 // Define navbar pages for dynamic rendering
 const NAV_PAGES = [
@@ -13,6 +14,14 @@ const NAV_PAGES = [
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const pathname = usePathname();
+
+  // Helper to determine if a nav link is active
+  const isActive = (slug: string) => {
+    if (slug === "") return pathname === "/" || pathname === "";
+    // Match exact path or path starting with /slug (for subpages)
+    return pathname === `/${slug}` || pathname.startsWith(`/${slug}/`);
+  };
 
   return (
     <nav className="w-full bg-white shadow-md sticky top-0 z-10">
@@ -52,9 +61,19 @@ export default function Navbar() {
               key={label}
               href={slug ? `/${slug}` : '/'}
               className={
-                label === "Home"
-                  ? "text-[#189ab4] font-medium hover:underline"
-                  : "text-[#495867] font-medium hover:text-[#189ab4]"
+                isActive(slug)
+                  ? "font-medium"
+                  : "text-[#495867] font-medium hover:text-[#003365]"
+              }
+              style={
+                isActive(slug)
+                  ? {
+                      background: "linear-gradient(85deg, #003365 54.3%, #0057AC 100%)",
+                      WebkitBackgroundClip: "text",
+                      WebkitTextFillColor: "transparent",
+                      transition: "background 0.3s"
+                    }
+                  : undefined
               }
             >
               {label}
@@ -64,8 +83,20 @@ export default function Navbar() {
         {/* Get Started Button */}
         <Link
           href="/get-started"
-          className="hidden md:inline-block bg-[#189ab4] text-white font-bold px-6 py-2 rounded-lg hover:bg-[#1687a7] transition-colors"
-          style={{ boxShadow: '0 1px 2px rgba(0,0,0,0.04)' }}
+          className="hidden md:inline-block text-white font-bold px-6 py-2 rounded-lg transition-colors"
+          style={{
+            background: "linear-gradient(85deg, #003365 54.3%, #0057AC 100%)",
+            boxShadow: '0 1px 2px rgba(0,0,0,0.04)',
+            transition: "background 0.3s"
+          }}
+          onMouseEnter={e => {
+            (e.target as HTMLElement).style.background =
+              "linear-gradient(85deg, #003365 54.3%, #0057AC 100%)";
+          }}
+          onMouseLeave={e => {
+            (e.target as HTMLElement).style.background =
+              "linear-gradient(85deg, #003365 54.3%, #0057AC 100%)";
+          }}
         >
           Get started
         </Link>
@@ -79,20 +110,54 @@ export default function Navbar() {
                 key={label}
                 href={slug ? `/${slug}` : '/'}
                 className={
-                  label === "Home"
-                    ? "text-[#189ab4] font-medium"
+                  isActive(slug)
+                    ? "font-medium"
                     : "text-[#495867] font-medium"
                 }
+                style={
+                  isActive(slug)
+                    ? {
+                        background: "linear-gradient(85deg, #003365 54.3%, #0057AC 100%)",
+                        WebkitBackgroundClip: "text",
+                        WebkitTextFillColor: "transparent",
+                        transition: "background 0.3s"
+                      }
+                    : undefined
+                }
                 onClick={() => setMenuOpen(false)}
+                onMouseEnter={e => {
+                  if (isActive(slug)) {
+                    (e.target as HTMLElement).style.background =
+                      "linear-gradient(85deg, #003365 54.3%, #0057AC 100%)";
+                  }
+                }}
+                onMouseLeave={e => {
+                  if (isActive(slug)) {
+                    (e.target as HTMLElement).style.background =
+                      "linear-gradient(85deg, #003365 54.3%, #0057AC 100%)";
+                  }
+                }}
               >
                 {label}
               </Link>
             ))}
             <Link
               href="/get-started"
-              className="bg-[#189ab4] text-white font-bold px-6 py-2 rounded-lg hover:bg-[#1687a7] transition-colors mt-2 text-center"
-              style={{ boxShadow: '0 1px 2px rgba(0,0,0,0.04)' }}
+              className="text-white font-bold px-6 py-2 rounded-lg transition-colors mt-2 text-center"
+              style={{
+                background: "linear-gradient(85deg, #003365 54.3%, #0057AC 100%)",
+                boxShadow: '0 1px 2px rgba(0,0,0,0.04)',
+                transition: "background 0.3s"
+              }}
               onClick={() => setMenuOpen(false)}
+              onMouseEnter={e => {
+                (e.target as HTMLElement).style.background =
+                  "linear-gradient(85deg, #003365 54.3%, #0057AC 100%)";
+              }}
+              onMouseLeave={e => {
+                (e.target as HTMLElement).style.background =
+                  "linear-gradient(85deg, #003365 54.3%, #0057AC 100%)";
+              }}
             >
               Get started
             </Link>
