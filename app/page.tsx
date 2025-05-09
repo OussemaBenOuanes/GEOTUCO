@@ -2,13 +2,51 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import useEmblaCarousel from 'embla-carousel-react';
-import Head from 'next/head'; // Add this import
+import Head from 'next/head';
 import { FloatingWhatsApp } from 'react-floating-whatsapp';
 import { testimonials } from './constants/testimonials';
 import { carouselData } from './constants/carouselData';
 import { services } from './constants/services';
 
+// Translations object
+const translations = {
+  en: {
+    title: "Achieve Excellence in Civil Engineering",
+    description: "Innovative solutions for infrastructure, construction, and development. Partner with us for quality, safety, and sustainability.",
+    getStarted: "Get Started",
+    servicesTitle: "What Our Clients Say",
+    faqTitle: "Frequently Asked Questions",
+    faq: [
+      { question: "What services do you offer?", answer: "We provide structural analysis, project management, site development, and environmental consulting." },
+      { question: "How do I start a project with GEOTUCO?", answer: "Simply contact us and our team will guide you through the process." },
+      { question: "Do you work with both public and private sectors?", answer: "Yes, we serve a diverse range of clients across sectors." }
+    ]
+  },
+  fr: {
+    title: "Atteignez l'excellence en génie civil",
+    description: "Des solutions innovantes pour les infrastructures, la construction et le développement. Collaborez avec nous pour la qualité, la sécurité et la durabilité.",
+    getStarted: "Commencer",
+    servicesTitle: "Ce que disent nos clients",
+    faqTitle: "Questions Fréquemment Posées",
+    faq: [
+      { question: "Quels services proposez-vous ?", answer: "Nous fournissons des analyses structurelles, la gestion de projet, le développement de sites et le conseil environnemental." },
+      { question: "Comment démarrer un projet avec GEOTUCO ?", answer: "Contactez-nous simplement et notre équipe vous guidera tout au long du processus." },
+      { question: "Travaillez-vous avec les secteurs public et privé ?", answer: "Oui, nous servons une large gamme de clients dans tous les secteurs." }
+    ]
+  }
+};
+
 export default function Home() {
+  const [language, setLanguage] = useState("en");
+
+  // Detect browser language
+  useEffect(() => {
+    const browserLang = navigator.language.startsWith("fr") ? "fr" : "en";
+    setLanguage(browserLang);
+  }, []);
+
+  const t = translations[language];
+
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
   const [selectedIndex, setSelectedIndex] = useState(0);
 
@@ -134,7 +172,7 @@ export default function Home() {
     <>
       <Head>
         <title>GEOTUCO | GeoTunisie Consulting</title>
-        <meta name="description" content="Innovative solutions for infrastructure, construction, and development. Partner with us for quality, safety, and sustainability." />
+        <meta name="description" content={t.description} />
         <meta property="og:title" content="GEOTUCO | GeoTunisie Consulting" />
         <meta property="og:description" content="Innovative solutions for infrastructure, construction, and development. Partner with us for quality, safety, and sustainability." />
         <meta property="og:type" content="website" />
@@ -350,7 +388,7 @@ export default function Home() {
               marginBottom: '1rem',
               textAlign: 'center'
             }}>
-              Achieve Excellence in Civil Engineering
+              {t.title}
             </h1>
             <p style={{
               color: '#4b5d67',
@@ -359,7 +397,7 @@ export default function Home() {
               textAlign: 'center',
               marginBottom: '2rem'
             }}>
-              Innovative solutions for infrastructure, construction, and development. Partner with us for quality, safety, and sustainability.
+              {t.description}
             </p>
             <Link href="/contact" style={{
               background: '#4b86b4',
@@ -371,7 +409,7 @@ export default function Home() {
               fontWeight: 600,
               boxShadow: '0 2px 8px #e0e6ed'
             }}>
-              Get Started
+              {t.getStarted}
             </Link>
           </div>
         </section>
@@ -408,7 +446,7 @@ export default function Home() {
           boxShadow: '0 2px 16px #e0e6ed',
           position: 'relative'
         }}>
-          <h2 style={{ color: '#2a4d69', textAlign: 'center', marginBottom: '2rem' }}>What Our Clients Say</h2>
+          <h2 style={{ color: '#2a4d69', textAlign: 'center', marginBottom: '2rem' }}>{t.servicesTitle}</h2>
           <div style={{
             display: 'flex',
             gap: '2rem',
@@ -439,33 +477,16 @@ export default function Home() {
           background: '#e3ecfa',
           borderRadius: 16
         }}>
-          <h3 style={{ color: '#2a4d69', marginBottom: '1.5rem' }}>Frequently Asked Questions</h3>
+          <h3 style={{ color: '#2a4d69', marginBottom: '1.5rem' }}>{t.faqTitle}</h3>
           <ul style={{ listStyle: 'none', padding: 0, color: '#333', fontSize: '1.05rem' }}>
-            <li style={{ marginBottom: '1rem' }}>
-              <b>What services do you offer?</b><br />
-              We provide structural analysis, project management, site development, and environmental consulting.
-            </li>
-            <li style={{ marginBottom: '1rem' }}>
-              <b>How do I start a project with GEOTUCO?</b><br />
-              Simply <Link href="/contact" style={{ color: '#4b86b4' }}>contact us</Link> and our team will guide you through the process.
-            </li>
-            <li>
-              <b>Do you work with both public and private sectors?</b><br />
-              Yes, we serve a diverse range of clients across sectors.
-            </li>
+            {t.faq.map((item, idx) => (
+              <li key={idx} style={{ marginBottom: '1rem' }}>
+                <b>{item.question}</b><br />
+                {item.answer}
+              </li>
+            ))}
           </ul>
         </section>
-
-        {/* Footer */}
-        {/* <footer style={{
-          textAlign: 'center',
-          marginTop: '2rem',
-          color: '#888',
-          fontSize: '0.95rem',
-          padding: '2rem 0 1rem 0'
-        }}>
-          &copy; {new Date().getFullYear()} GEOTUCO | GeoTunisie Consulting
-        </footer> */}
       </main>
     </>
   );
