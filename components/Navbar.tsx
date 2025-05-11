@@ -13,20 +13,42 @@ const NAV_PAGES = [
       { label: "Geotechnical Tests", slug: "geotechnical-tests" }
     ]
   },
-  { label: "Pricing", slug: "pricing" },
+  { label: "Softwares", slug: "softwares", children: [
+      { label: "GEOLOGA®", slug: "geologa" },
+      { label: "GEOPRES®", slug: "geopres" },
+      { label: "GEOPREC®", slug: "geoprec" },
+      { label: "GEOSTAT®", slug: "geostat" },
+      { label: "GEODYNA®", slug: "geodyna" },
+      { label: "GEOGRAN®", slug: "geogran" },
+      { label: "GEOLIMA®", slug: "geolima" },
+      { label: "GEOCOMP®", slug: "geocomp" },
+      { label: "GEOCONS®", slug: "geocons" },
+      { label: "GEOGONF®", slug: "geogonf" },
+      { label: "GEOCISA®", slug: "geocisa" },
+      { label: "GEOPROC®", slug: "geoproc" }
+    ]
+  },
   { label: "Contact", slug: "contact" }
 ];
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [servicesOpen, setServicesOpen] = useState(false); // For mobile dropdown
-  const [servicesDropdown, setServicesDropdown] = useState(false); // For desktop dropdown
-  const servicesDropdownTimeout = React.useRef<NodeJS.Timeout | null>(null);
+  const [dropdownOpen, setDropdownOpen] = useState<string | null>(null); // Track which dropdown is open
+  const dropdownTimeout = React.useRef<NodeJS.Timeout | null>(null);
   const pathname = usePathname();
 
   // Helper to determine if a nav link is active
   const isActive = (slug: string) => {
     if (slug === "") return pathname === "/" || pathname === "";
+    // For software children, match /geoprog/[slug]
+    if (
+      NAV_PAGES.some(
+        (p) => p.children && p.children.some((c) => c.slug === slug)
+      )
+    ) {
+      return pathname === `/geoprog/${slug}` || pathname.startsWith(`/geoprog/${slug}/`);
+    }
+    // Default: match /[slug]
     return pathname === `/${slug}` || pathname.startsWith(`/${slug}/`);
   };
 
@@ -34,6 +56,10 @@ export default function Navbar() {
   const isParentActive = (children: { slug: string }[]) => {
     return children.some(child => isActive(child.slug));
   };
+
+  function setServicesOpen(arg0: (v: any) => boolean): void {
+    throw new Error('Function not implemented.');
+  }
 
   return (
     <nav className="w-full bg-white shadow-md sticky top-0 z-10">
@@ -96,11 +122,11 @@ export default function Navbar() {
                 key={label}
                 className="relative"
                 onMouseEnter={() => {
-                  if (servicesDropdownTimeout.current) clearTimeout(servicesDropdownTimeout.current);
-                  setServicesDropdown(true);
+                  if (dropdownTimeout.current) clearTimeout(dropdownTimeout.current);
+                  setDropdownOpen(slug);
                 }}
                 onMouseLeave={() => {
-                  servicesDropdownTimeout.current = setTimeout(() => setServicesDropdown(false), 120);
+                  dropdownTimeout.current = setTimeout(() => setDropdownOpen(null), 120);
                 }}
               >
                 <Link
@@ -125,21 +151,29 @@ export default function Navbar() {
                 </Link>
                 {/* Dropdown */}
                 <div
-                  className={`absolute left-1/2 -translate-x-1/2 top-full mt-2 w-max px-2 bg-white border border-gray-100 rounded-lg shadow-lg transition-opacity z-20
-                    ${servicesDropdown ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}
+                  className={`absolute top-full mt-2 w-max px-2 bg-white border border-gray-100 rounded-lg shadow-lg z-20
+                    ${dropdownOpen === slug ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}
+                  style={{
+                    left: "50%",
+                    transform: dropdownOpen === slug
+                      ? "translate(-50%, 0) scale(1)"
+                      : "translate(-50%, 16px) scale(0.97)",
+                    transition: "opacity 250ms cubic-bezier(.4,0,.2,1), transform 250ms cubic-bezier(.4,0,.2,1)",
+                    willChange: "opacity, transform"
+                  }}
                   onMouseEnter={() => {
-                    if (servicesDropdownTimeout.current) clearTimeout(servicesDropdownTimeout.current);
-                    setServicesDropdown(true);
+                    if (dropdownTimeout.current) clearTimeout(dropdownTimeout.current);
+                    setDropdownOpen(slug);
                   }}
                   onMouseLeave={() => {
-                    servicesDropdownTimeout.current = setTimeout(() => setServicesDropdown(false), 120);
+                    dropdownTimeout.current = setTimeout(() => setDropdownOpen(null), 120);
                   }}
                 >
                   <div className="flex flex-col py-2">
                     {children.map((child) => (
                       <Link
                         key={child.label}
-                        href={`/${child.slug}`}
+                        href={`/geoprog/${child.slug}`}
                         className={
                           isActive(child.slug)
                             ? "px-5 py-2 font-medium"
@@ -222,12 +256,12 @@ export default function Navbar() {
                   >
                     {label}
                   </button>
-                  {servicesOpen && (
+                  {setServicesOpen && (
                     <div className="flex flex-col pl-4">
                       {children.map((child) => (
                         <Link
                           key={child.label}
-                          href={`/${child.slug}`}
+                          href={`/geoprog/${child.slug}`}
                           className={
                             isActive(child.slug)
                               ? "font-medium"

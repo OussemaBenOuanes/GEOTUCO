@@ -205,6 +205,28 @@ export default async function DynamicPage({ params }: { params: Promise<{ slug: 
     );
   }
 
+  // Softwares page
+  if (slug === "softwares") {
+    return (
+      <main style={{ padding: '2rem', fontFamily: 'sans-serif', maxWidth: 900, margin: '0 auto' }}>
+        <h1 style={{ fontSize: '2.2rem', color: '#2a4d69', fontWeight: 800, marginBottom: '2rem', textAlign: 'center' }}>
+          Softwares
+        </h1>
+        <div style={{ color: '#444', fontSize: '1.15rem', marginBottom: '1.5rem', textAlign: 'center' }}>
+          Explore the essential software tools we use for geotechnical, structural, and civil engineering projects. Our toolkit ensures accuracy, efficiency, and industry compliance.
+        </div>
+        <ul style={{ color: '#4b5d67', fontSize: '1rem', maxWidth: 600, margin: '0 auto', lineHeight: 1.7 }}>
+          <li>✔️ Plaxis 2D/3D – Geotechnical finite element analysis</li>
+          <li>✔️ GeoStudio – Slope stability and seepage analysis</li>
+          <li>✔️ AutoCAD Civil 3D – Civil infrastructure design</li>
+          <li>✔️ SAP2000 – Structural analysis and design</li>
+          <li>✔️ Rocscience Suite – Rock and soil mechanics</li>
+          <li>✔️ Microsoft Project – Project scheduling and management</li>
+        </ul>
+      </main>
+    );
+  }
+
   const service = pages[slug];
   if (!service) return notFound();
 
