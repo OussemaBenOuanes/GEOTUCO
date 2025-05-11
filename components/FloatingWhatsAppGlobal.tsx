@@ -19,13 +19,14 @@ export default function FloatingWhatsAppGlobal() {
       statusMessage="Typically replies within 1 hour"
       chatMessage="Hello there! 👋 How can we help you?"
       placeholder="Type your message.."
-      allowEsc
-      allowClickAway
+      allowEsc={true}
+      allowClickAway={false}
       notification
       notificationDelay={30}
       notificationSound
       buttonStyle={{ boxShadow: 'none' }}
       onClick={handleWhatsAppClick}
+      onNotification={undefined}
     />
   );
 }

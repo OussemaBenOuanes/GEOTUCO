@@ -28,9 +28,11 @@ export default function RootLayout({
         <link rel="icon" type="image/png" sizes="512x512" href="/android-chrome-512x512.png" />
         <link rel="manifest" href="/site.webmanifest" />
       </head>
-      <body>
+      <body className="min-h-screen flex flex-col">
         <Navbar />
-        {children}
+        <main className="flex-1 flex flex-col">
+          {children}
+        </main>
         <Footer />
         <SpeedInsights />
         <FloatingWhatsAppGlobal />
