@@ -162,6 +162,49 @@ export default async function DynamicPage({ params }: { params: Promise<{ slug: 
     );
   }
 
+  // Geotechnical Engineering page
+  if (slug === "geotechnical-engineering") {
+    return (
+      <main style={{ padding: '2rem', fontFamily: 'sans-serif', maxWidth: 900, margin: '0 auto' }}>
+        <h1 style={{ fontSize: '2.2rem', color: '#2a4d69', fontWeight: 800, marginBottom: '2rem', textAlign: 'center' }}>
+          Geotechnical Engineering
+        </h1>
+        <div style={{ color: '#444', fontSize: '1.15rem', marginBottom: '1.5rem', textAlign: 'center' }}>
+          Our Geotechnical Engineering services provide comprehensive site investigations, soil analysis, and foundation recommendations to ensure the safety and stability of your construction projects. We utilize advanced testing methods and industry expertise to deliver reliable solutions tailored to your project's unique requirements.
+        </div>
+        <ul style={{ color: '#4b5d67', fontSize: '1rem', maxWidth: 600, margin: '0 auto', lineHeight: 1.7 }}>
+          <li>✔️ Site and soil investigations</li>
+          <li>✔️ Foundation design and recommendations</li>
+          <li>✔️ Slope stability analysis</li>
+          <li>✔️ Ground improvement solutions</li>
+          <li>✔️ Retaining wall and earthwork design</li>
+        </ul>
+      </main>
+    );
+  }
+
+  // Geotechnical Tests page
+  if (slug === "geotechnical-tests") {
+    return (
+      <main style={{ padding: '2rem', fontFamily: 'sans-serif', maxWidth: 900, margin: '0 auto' }}>
+        <h1 style={{ fontSize: '2.2rem', color: '#2a4d69', fontWeight: 800, marginBottom: '2rem', textAlign: 'center' }}>
+          Geotechnical Tests
+        </h1>
+        <div style={{ color: '#444', fontSize: '1.15rem', marginBottom: '1.5rem', textAlign: 'center' }}>
+          We offer a comprehensive suite of geotechnical tests to assess soil, rock, and groundwater conditions for your project. Our laboratory and field testing services ensure accurate data for safe and cost-effective engineering solutions.
+        </div>
+        <ul style={{ color: '#4b5d67', fontSize: '1rem', maxWidth: 600, margin: '0 auto', lineHeight: 1.7 }}>
+          <li>✔️ Standard Penetration Test (SPT)</li>
+          <li>✔️ Cone Penetration Test (CPT)</li>
+          <li>✔️ Plate Load Test</li>
+          <li>✔️ Soil Classification and Index Properties</li>
+          <li>✔️ Shear Strength and Consolidation Tests</li>
+          <li>✔️ Permeability and Compaction Tests</li>
+        </ul>
+      </main>
+    );
+  }
+
   const service = pages[slug];
   if (!service) return notFound();
 
