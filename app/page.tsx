@@ -183,13 +183,13 @@ export default function Home() {
         <meta name="twitter:description" content="Innovative solutions for infrastructure, construction, and development. Partner with us for quality, safety, and sustainability." />
         <meta name="twitter:image" content="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=900&q=80" />
       </Head>
-      <main style={{ fontFamily: 'Inter, sans-serif', background: '#f7f9fa', minHeight: '100vh' }}>
+      <main style={{ fontFamily: 'Inter, sans-serif',  minHeight: '100vh' }}>
         {/* Embla Carousel - moved outside Hero Section */}
         <div
           className="embla"
           ref={emblaRef}
           style={{
-            // maxWidth: 1200, // was 900
+            // maxWidth: 1200,
             margin: '2rem auto 2.5rem auto', // Added bottom margin for spacing
             width: '100%'
           }}
@@ -215,9 +215,7 @@ export default function Home() {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  height: 520,
-                  // Optionally, add marginRight except for last slide if you want spacing:
-                  // marginRight: idx !== carouselData.length - 1 ? 16 : 0,
+                  height: '78vh',
                 }}
               >
                 {/* Parallax wrapper */}
@@ -252,17 +250,13 @@ export default function Home() {
                         borderBottomRightRadius: 12,
                         boxSizing: 'border-box',
                         display: 'flex',
-                        flexDirection: 'row', // changed from column to row
-                        alignItems: 'flex-end', // align items to bottom
+                        flexDirection: 'row',
+                        alignItems: 'flex-end',
                         gap: '1.1rem',
                         opacity: selectedIndex === idx ? 1 : 0,
                         pointerEvents: selectedIndex === idx ? 'auto' : 'none',
                         transform: selectedIndex === idx ? 'scale(1)' : 'scale(0.92)',
-                        transition: 'opacity 0.15s cubic-bezier(.4,0,.2,1), transform 0.15s cubic-bezier(.4,0,.2,1)',
-                        // Responsive: stack vertically on small screens
-                        ...(typeof window !== "undefined" && window.innerWidth <= 600
-                          ? { flexDirection: 'column', alignItems: 'flex-start', gap: '0.8rem' }
-                          : {})
+                        transition: 'opacity 0.15s cubic-bezier(.4,0,.2,1), transform 0.15s cubic-bezier(.4,0,.2,1)'
                       }}
                     >
                       {/* Title and Description at the bottom left or above button on mobile */}
