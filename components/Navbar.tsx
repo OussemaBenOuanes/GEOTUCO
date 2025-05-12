@@ -173,7 +173,12 @@ export default function Navbar() {
                     {children.map((child) => (
                       <Link
                         key={child.label}
-                        href={`/geoprog/${child.slug}`}
+                        href={
+                          // Only software children are under /geoprog
+                          label === "Softwares"
+                            ? `/geoprog/${child.slug}`
+                            : `/${child.slug}`
+                        }
                         className={
                           isActive(child.slug)
                             ? "px-5 py-2 font-medium"
@@ -261,7 +266,12 @@ export default function Navbar() {
                       {children.map((child) => (
                         <Link
                           key={child.label}
-                          href={`/geoprog/${child.slug}`}
+                          href={
+                            // Only software children are under /geoprog
+                            label === "Softwares"
+                              ? `/geoprog/${child.slug}`
+                              : `/${child.slug}`
+                          }
                           className={
                             isActive(child.slug)
                               ? "font-medium"
