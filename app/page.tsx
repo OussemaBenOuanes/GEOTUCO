@@ -189,7 +189,7 @@ export default function Home() {
           className="embla"
           ref={emblaRef}
           style={{
-            maxWidth: 1200, // was 900
+            // maxWidth: 1200, // was 900
             margin: '2rem auto 2.5rem auto', // Added bottom margin for spacing
             width: '100%'
           }}
