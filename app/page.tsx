@@ -164,7 +164,14 @@ export default function Home() {
       if (interval) clearInterval(interval);
       interval = setInterval(() => {
         if (emblaApi && document.visibilityState === "visible") {
+          // Prefetch the next image for better LCP
           const nextIdx = (emblaApi.selectedScrollSnap() + 1) % carouselData.length;
+          const nextImg = carouselData[nextIdx]?.src;
+          if (nextImg) {
+            const img = new window.Image();
+            img.loading = "lazy";
+            img.src = nextImg;
+          }
           emblaApi.scrollTo(nextIdx);
         }
       }, 4500);
@@ -256,6 +263,7 @@ export default function Home() {
                     <img
                       src={item.src}
                       alt={item.title}
+                      loading="lazy"
                       style={{
                         width: '100%',
                         height: '100%',
