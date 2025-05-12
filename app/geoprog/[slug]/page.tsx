@@ -1,4 +1,5 @@
 import React from "react";
+import { notFound } from "next/navigation";
 
 const SOFTWARES: Record<string, { title: string; description: string }> = {
   geologa: {
@@ -55,14 +56,7 @@ export default async function GeoprogPage({ params }: { params: Promise<{ slug: 
   const { slug } = await params;
   const software = SOFTWARES[slug];
 
-  if (!software) {
-    return (
-      <main style={{ padding: "2rem", fontFamily: "sans-serif", maxWidth: 700, margin: "0 auto" }}>
-        <h1 style={{ fontSize: "2rem", color: "#2a4d69", marginBottom: "1rem" }}>Software Not Found</h1>
-        <p style={{ fontSize: "1.15rem", color: "#444" }}>The requested software page does not exist.</p>
-      </main>
-    );
-  }
+  if (!software) return notFound();
 
   return (
     <main style={{ padding: "2rem", fontFamily: "sans-serif", maxWidth: 700, margin: "0 auto" }}>

@@ -158,13 +158,41 @@ export default function Home() {
       .on('scroll', tweenParallax)
       .on('slideFocus', tweenParallax);
 
+    // Auto-slide every 4.5 seconds, pause when page/tab is not active, reset on manual slide
+    let interval: NodeJS.Timeout | null = null;
+    function startInterval() {
+      if (interval) clearInterval(interval);
+      interval = setInterval(() => {
+        if (emblaApi && document.visibilityState === "visible") {
+          const nextIdx = (emblaApi.selectedScrollSnap() + 1) % carouselData.length;
+          emblaApi.scrollTo(nextIdx);
+        }
+      }, 4500);
+    }
+    function handleVisibility() {
+      if (document.visibilityState === "visible") {
+        startInterval();
+      } else if (interval) {
+        clearInterval(interval);
+      }
+    }
+    function handleUserSlide() {
+      startInterval(); // reset timer on manual slide
+    }
+    document.addEventListener("visibilitychange", handleVisibility);
+    emblaApi.on('select', handleUserSlide);
+    startInterval();
+
     return () => {
       emblaApi
         .off('reInit', setTweenNodes)
         .off('reInit', setTweenFactor)
         .off('reInit', tweenParallax)
         .off('scroll', tweenParallax)
-        .off('slideFocus', tweenParallax);
+        .off('slideFocus', tweenParallax)
+        .off('select', handleUserSlide);
+      if (interval) clearInterval(interval);
+      document.removeEventListener("visibilitychange", handleVisibility);
     };
   }, [emblaApi, setTweenNodes, setTweenFactor, tweenParallax]);
 
@@ -259,7 +287,7 @@ export default function Home() {
                         transition: 'opacity 0.15s cubic-bezier(.4,0,.2,1), transform 0.15s cubic-bezier(.4,0,.2,1)'
                       }}
                     >
-                      {/* Title and Description at the bottom left or above button on mobile */}
+                      {/* Title and Description at the bottom left */}
                       <div style={{
                         display: 'flex',
                         flexDirection: 'column',
@@ -270,7 +298,7 @@ export default function Home() {
                         <div style={{
                           fontSize: '2.2rem',
                           fontWeight: 700,
-                          marginBottom: 18, // increased space between title and description
+                          marginBottom: 18,
                           lineHeight: 1.1
                         }}>
                           {item.title}
@@ -285,14 +313,11 @@ export default function Home() {
                           {item.description}
                         </div>
                       </div>
-                      {/* Button aligned right or below on mobile */}
+                      {/* Button aligned right */}
                       <div
                         style={{
                           display: 'flex',
                           alignItems: 'flex-end',
-                          width: typeof window !== "undefined" && window.innerWidth <= 600 ? '100%' : undefined,
-                          justifyContent: typeof window !== "undefined" && window.innerWidth <= 600 ? 'flex-start' : undefined,
-                          marginTop: typeof window !== "undefined" && window.innerWidth <= 600 ? '0.7rem' : undefined
                         }}
                       >
                         <button
@@ -306,14 +331,14 @@ export default function Home() {
                             borderRadius: 12,
                             padding: '0.65em 1.5em',
                             fontWeight: 500,
-                            fontSize: 'clamp(0.95rem, 1.5vw, 1.1rem)', // responsive font size
+                            fontSize: 'clamp(0.95rem, 1.5vw, 1.1rem)',
                             cursor: 'pointer',
                             boxShadow: '0 1px 4px #0002',
                             transition: 'background 0.2s, color 0.2s, border 0.2s'
                           }}
                           onClick={e => {
                             e.stopPropagation();
-                            // Add your button logic here (e.g., navigate, open modal, etc.)
+                            // Add your button logic here
                           }}
                         >
                           <span>More Details</span>
