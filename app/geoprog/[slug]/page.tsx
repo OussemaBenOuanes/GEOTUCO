@@ -1,56 +1,7 @@
 import React from "react";
 import { notFound } from "next/navigation";
-
-const SOFTWARES: Record<string, { title: string; description: string }> = {
-  geologa: {
-    title: "GEOLOGA®",
-    description: "GEOLOGA® is a specialized software for geological data management and analysis, supporting geotechnical and civil engineering projects.",
-  },
-  geopres: {
-    title: "GEOPRES®",
-    description: "GEOPRES® provides advanced tools for pressuremeter test data processing and interpretation in geotechnical investigations.",
-  },
-  geoprec: {
-    title: "GEOPREC®",
-    description: "GEOPREC® is designed for precision geotechnical measurements and reporting, ensuring high accuracy in field and lab results.",
-  },
-  geostat: {
-    title: "GEOSTAT®",
-    description: "GEOSTAT® offers comprehensive statistical analysis for geotechnical and geological datasets.",
-  },
-  geodyna: {
-    title: "GEODYNA®",
-    description: "GEODYNA® focuses on dynamic soil testing and seismic analysis for geotechnical engineering.",
-  },
-  geogran: {
-    title: "GEOGRAN®",
-    description: "GEOGRAN® is used for granulometric analysis and soil classification in laboratory environments.",
-  },
-  geolima: {
-    title: "GEOLIMA®",
-    description: "GEOLIMA® assists in Atterberg limits and soil consistency analysis for geotechnical labs.",
-  },
-  geocomp: {
-    title: "GEOCOMP®",
-    description: "GEOCOMP® is a comprehensive suite for soil compaction and consolidation test management.",
-  },
-  geocons: {
-    title: "GEOCONS®",
-    description: "GEOCONS® provides tools for consolidation test data processing and settlement analysis.",
-  },
-  geogonf: {
-    title: "GEOGONF®",
-    description: "GEOGONF® specializes in swelling and shrinkage tests for expansive soils.",
-  },
-  geocisa: {
-    title: "GEOCISA®",
-    description: "GEOCISA® is tailored for in-situ soil testing and geotechnical site investigation management.",
-  },
-  geoproc: {
-    title: "GEOPROC®",
-    description: "GEOPROC® offers process automation and reporting for geotechnical laboratory workflows.",
-  },
-};
+import { headers } from "next/headers";
+import { SOFTWARES } from "../../constants/softwares";
 
 export default async function GeoprogPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -58,10 +9,27 @@ export default async function GeoprogPage({ params }: { params: Promise<{ slug: 
 
   if (!software) return notFound();
 
+  // Detect language from headers or fallback to 'en'
+  let lang = "en";
+  if (typeof headers !== "undefined") {
+    // @ts-ignore
+    const accept = headers().get("accept-language");
+    if (accept && accept.startsWith("fr")) lang = "fr";
+  }
+
+  // Move SEO tags to a React fragment for use in the layout's <head>
+  // Use next/head for client-side, but for server components, return only main content
+  // Let the layout handle <head> tags if needed
+
   return (
+    // ...no <head> here...
     <main style={{ padding: "2rem", fontFamily: "sans-serif", maxWidth: 700, margin: "0 auto" }}>
+      {/* Optionally, you can export SEO data for use in layout */}
+      {/* <SEO title={software.title} description={lang === "fr" ? software.seo.fr : software.seo.en} /> */}
       <h1 style={{ fontSize: "2rem", color: "#2a4d69", marginBottom: "1rem" }}>{software.title}</h1>
-      <p style={{ fontSize: "1.15rem", color: "#444" }}>{software.description}</p>
+      <p style={{ fontSize: "1.15rem", color: "#444" }}>
+        {lang === "fr" ? software.descriptionFr : software.description}
+      </p>
     </main>
   );
 }
