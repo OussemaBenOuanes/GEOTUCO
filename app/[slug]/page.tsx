@@ -135,7 +135,7 @@ export default async function DynamicPage({ params }: { params: Promise<{ slug: 
 
   return (
     <>
-      <title>{service.title} | GEOTUCO</title>
+      <title>{`${service.title} | GEOTUCO`}</title>
       <main style={{ padding: '2rem', fontFamily: 'sans-serif', maxWidth: 700, margin: '0 auto' }}>
         <h1 style={{ fontSize: '2rem', color: '#2a4d69', marginBottom: '1rem' }}>{service.title}</h1>
         <p style={{ fontSize: '1.15rem', color: '#444' }}>{service.description}</p>
