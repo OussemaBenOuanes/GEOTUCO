@@ -7,13 +7,13 @@ import { usePathname } from 'next/navigation';
 const NAV_PAGES = [
   { label: "Home", slug: "" },
   { label: "About", slug: "about" },
-  // Services will be handled as a dropdown, so remove its children from here
   { label: "Services", slug: "services", children: [
       { label: "Geotechnical Engineering", slug: "geotechnical-engineering" },
       { label: "Geotechnical Tests", slug: "geotechnical-tests" }
     ]
   },
-  { label: "Softwares", slug: "softwares", children: [
+  // Change "Softwares" to point to /geoprog, and children slugs remain the same
+  { label: "Softwares", slug: "geoprog", children: [
       { label: "GEOLOGA®", slug: "geologa" },
       { label: "GEOPRES®", slug: "geopres" },
       { label: "GEOPREC®", slug: "geoprec" },
@@ -35,6 +35,7 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState<string | null>(null); // Track which dropdown is open
   const dropdownTimeout = React.useRef<NodeJS.Timeout | null>(null);
+  const langHoverTimeout = React.useRef<NodeJS.Timeout | null>(null);
   const pathname = usePathname();
 
   // Helper to determine if a nav link is active
@@ -174,7 +175,7 @@ export default function Navbar() {
                       <Link
                         key={child.label}
                         href={
-                          // Only software children are under /geoprog
+                          // All software children are under /geoprog/[slug]
                           label === "Softwares"
                             ? `/geoprog/${child.slug}`
                             : `/${child.slug}`
@@ -205,25 +206,327 @@ export default function Navbar() {
           ))}
         </div>
         {/* Get Started Button */}
-        <Link
-          href="/get-started"
-          className="hidden md:inline-block text-white font-bold px-6 py-2 rounded-lg transition-colors"
-          style={{
-            background: "linear-gradient(85deg, #003365 54.3%, #0057AC 100%)",
-            boxShadow: '0 1px 2px rgba(0,0,0,0.04)',
-            transition: "background 0.3s"
-          }}
-          onMouseEnter={e => {
-            (e.target as HTMLElement).style.background =
-              "linear-gradient(85deg, #003365 54.3%, #0057AC 100%)";
-          }}
-          onMouseLeave={e => {
-            (e.target as HTMLElement).style.background =
-              "linear-gradient(85deg, #003365 54.3%, #0057AC 100%)";
-          }}
-        >
-          Get started
-        </Link>
+        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+          <Link
+            href="/get-started"
+            className="hidden md:inline-block text-white font-bold px-6 py-2 rounded-lg transition-colors"
+            style={{
+              background: "linear-gradient(85deg, #003365 54.3%, #0057AC 100%)",
+              boxShadow: '0 1px 2px rgba(0,0,0,0.04)',
+              transition: "background 0.35s cubic-bezier(.4,0,.2,1), box-shadow 0.3s cubic-bezier(.4,0,.2,1)"
+            }}
+            onMouseEnter={e => {
+              (e.target as HTMLElement).style.background =
+                "linear-gradient(90deg, #0057AC 0%, #00C6FB 100%)";
+            }}
+            onMouseLeave={e => {
+              (e.target as HTMLElement).style.background =
+                "linear-gradient(85deg, #003365 54.3%, #0057AC 100%)";
+              (e.target as HTMLElement).style.boxShadow = "0 1px 2px rgba(0,0,0,0.04)";
+            }}
+          >
+            Get started
+          </Link>
+          {/* Language Dropdown */}
+          <div style={{ position: "relative" }}>
+            <button
+              type="button"
+              aria-label="Select language"
+              style={{
+                background: "#fff",
+                borderRadius: "0.4em",
+                padding: "0.4em 0.7em 0.4em 0.7em",
+                display: "flex",
+                alignItems: "center",
+                cursor: "pointer",
+                transition: "background 0.2s",
+                minWidth: 40,
+                minHeight: 40,
+                boxShadow: "0 1px 2px rgba(0,0,0,0.04)"
+              }}
+              onClick={() => setDropdownOpen(dropdownOpen === "lang" ? null : "lang")}
+              onMouseEnter={e => {
+                // Color effect
+                const svgImg = (e.currentTarget as HTMLElement).querySelector("img");
+                const svgArrow = (e.currentTarget as HTMLElement).querySelector("svg:last-of-type path");
+                if (svgImg) (svgImg as HTMLElement).style.filter = "invert(32%) sepia(97%) saturate(749%) hue-rotate(183deg) brightness(97%) contrast(101%)";
+                if (svgArrow) (svgArrow as SVGPathElement).setAttribute("stroke", "#0057AC");
+                // UX: open menu after delay, clear any close timer
+                if (langHoverTimeout.current) clearTimeout(langHoverTimeout.current);
+                langHoverTimeout.current = setTimeout(() => setDropdownOpen("lang"), 120);
+              }}
+              onMouseLeave={e => {
+                // Color effect
+                const svgImg = (e.currentTarget as HTMLElement).querySelector("img");
+                const svgArrow = (e.currentTarget as HTMLElement).querySelector("svg:last-of-type path");
+                if (svgImg) (svgImg as HTMLElement).style.filter = "";
+                if (svgArrow) (svgArrow as SVGPathElement).setAttribute("stroke", "#003365");
+                // UX: close menu after delay
+                if (langHoverTimeout.current) clearTimeout(langHoverTimeout.current);
+                langHoverTimeout.current = setTimeout(() => setDropdownOpen(null), 180);
+                }}
+              >
+                <img
+                src="https://www.svgrepo.com/show/506518/language.svg"
+                alt="Language"
+                width={22}
+                height={22}
+                style={{ display: "inline-block", transition: "filter 0.2s" }}
+                />
+                <svg width="14" height="14" style={{ marginLeft: 4, transition: "stroke 0.2s" }} viewBox="0 0 20 20" fill="none">
+                <path d="M6 8l4 4 4-4" stroke="#495867" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+            </button>
+            {dropdownOpen === "lang" && (
+              <div
+                className={`absolute top-full mt-2 w-max px-2 bg-white border border-gray-100 rounded-lg shadow-lg z-20
+                  ${dropdownOpen === "lang" ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}
+                style={{
+                  left: "50%",
+                  transform: dropdownOpen === "lang"
+                    ? "translate(-50%, 0) scale(1)"
+                    : "translate(-50%, 16px) scale(0.97)",
+                  transition: "opacity 250ms cubic-bezier(.4,0,.2,1), transform 250ms cubic-bezier(.4,0,.2,1)",
+                  willChange: "opacity, transform"
+                }}
+                onMouseEnter={() => {
+                  if (langHoverTimeout.current) clearTimeout(langHoverTimeout.current);
+                  setDropdownOpen("lang");
+                }}
+                onMouseLeave={() => {
+                  if (langHoverTimeout.current) clearTimeout(langHoverTimeout.current);
+                  langHoverTimeout.current = setTimeout(() => setDropdownOpen(null), 180);
+                }}
+              >
+                <button
+                  style={{
+                    display: "block",
+                    width: "100%",
+                    background: "none",
+                    border: "none",
+                    padding: "0.5em 1em",
+                    textAlign: "left",
+                    cursor: "pointer",
+                    color: "#003365",
+                    fontWeight: 500,
+                    fontSize: 15,
+                    transition: "color 0.2s"
+                  }}
+                  onMouseEnter={e => (e.currentTarget.style.color = "#0057AC")}
+                  onMouseLeave={e => (e.currentTarget.style.color = "#003365")}
+                  onClick={() => setDropdownOpen(null)}
+                >
+                  English
+                </button>
+                <button
+                  style={{
+                    display: "block",
+                    width: "100%",
+                    background: "none",
+                    border: "none",
+                    padding: "0.5em 1em",
+                    textAlign: "left",
+                    cursor: "pointer",
+                    color: "#003365",
+                    fontWeight: 500,
+                    fontSize: 15,
+                    transition: "color 0.2s"
+                  }}
+                  onMouseEnter={e => (e.currentTarget.style.color = "#0057AC")}
+                  onMouseLeave={e => (e.currentTarget.style.color = "#003365")}
+                  onClick={() => setDropdownOpen(null)}
+                >
+                  Français
+                </button>
+                <button
+                  style={{
+                    display: "block",
+                    width: "100%",
+                    background: "none",
+                    border: "none",
+                    padding: "0.5em 1em",
+                    textAlign: "left",
+                    cursor: "pointer",
+                    color: "#003365",
+                    fontWeight: 500,
+                    fontSize: 15,
+                    transition: "color 0.2s"
+                  }}
+                  onMouseEnter={e => (e.currentTarget.style.color = "#0057AC")}
+                  onMouseLeave={e => (e.currentTarget.style.color = "#003365")}
+                  onClick={() => setDropdownOpen(null)}
+                >
+                  العربية
+                </button>
+                <button
+                  style={{
+                    display: "block",
+                    width: "100%",
+                    background: "none",
+                    border: "none",
+                    padding: "0.5em 1em",
+                    textAlign: "left",
+                    cursor: "pointer",
+                    color: "#003365",
+                    fontWeight: 500,
+                    fontSize: 15,
+                    transition: "color 0.2s"
+                  }}
+                  onMouseEnter={e => (e.currentTarget.style.color = "#0057AC")}
+                  onMouseLeave={e => (e.currentTarget.style.color = "#003365")}
+                  onClick={() => setDropdownOpen(null)}
+                >
+                  Español
+                </button>
+                <button
+                  style={{
+                    display: "block",
+                    width: "100%",
+                    background: "none",
+                    border: "none",
+                    padding: "0.5em 1em",
+                    textAlign: "left",
+                    cursor: "pointer",
+                    color: "#003365",
+                    fontWeight: 500,
+                    fontSize: 15,
+                    transition: "color 0.2s"
+                  }}
+                  onMouseEnter={e => (e.currentTarget.style.color = "#0057AC")}
+                  onMouseLeave={e => (e.currentTarget.style.color = "#003365")}
+                  onClick={() => setDropdownOpen(null)}
+                >
+                  Deutsch
+                </button>
+                <button
+                  style={{
+                    display: "block",
+                    width: "100%",
+                    background: "none",
+                    border: "none",
+                    padding: "0.5em 1em",
+                    textAlign: "left",
+                    cursor: "pointer",
+                    color: "#003365",
+                    fontWeight: 500,
+                    fontSize: 15,
+                    transition: "color 0.2s"
+                  }}
+                  onMouseEnter={e => (e.currentTarget.style.color = "#0057AC")}
+                  onMouseLeave={e => (e.currentTarget.style.color = "#003365")}
+                  onClick={() => setDropdownOpen(null)}
+                >
+                  Italiano
+                </button>
+                {/* Chinese */}
+                <button
+                  style={{
+                    display: "block",
+                    width: "100%",
+                    background: "none",
+                    border: "none",
+                    padding: "0.5em 1em",
+                    textAlign: "left",
+                    cursor: "pointer",
+                    color: "#003365",
+                    fontWeight: 500,
+                    fontSize: 15,
+                    transition: "color 0.2s"
+                  }}
+                  onMouseEnter={e => (e.currentTarget.style.color = "#0057AC")}
+                  onMouseLeave={e => (e.currentTarget.style.color = "#003365")}
+                  onClick={() => setDropdownOpen(null)}
+                >
+                  中文 (Chinese)
+                </button>
+                {/* Swahili */}
+                <button
+                  style={{
+                    display: "block",
+                    width: "100%",
+                    background: "none",
+                    border: "none",
+                    padding: "0.5em 1em",
+                    textAlign: "left",
+                    cursor: "pointer",
+                    color: "#003365",
+                    fontWeight: 500,
+                    fontSize: 15,
+                    transition: "color 0.2s"
+                  }}
+                  onMouseEnter={e => (e.currentTarget.style.color = "#0057AC")}
+                  onMouseLeave={e => (e.currentTarget.style.color = "#003365")}
+                  onClick={() => setDropdownOpen(null)}
+                >
+                  Kiswahili
+                </button>
+                {/* Yoruba */}
+                <button
+                  style={{
+                    display: "block",
+                    width: "100%",
+                    background: "none",
+                    border: "none",
+                    padding: "0.5em 1em",
+                    textAlign: "left",
+                    cursor: "pointer",
+                    color: "#003365",
+                    fontWeight: 500,
+                    fontSize: 15,
+                    transition: "color 0.2s"
+                  }}
+                  onMouseEnter={e => (e.currentTarget.style.color = "#0057AC")}
+                  onMouseLeave={e => (e.currentTarget.style.color = "#003365")}
+                  onClick={() => setDropdownOpen(null)}
+                >
+                  Yorùbá
+                </button>
+                {/* Amharic */}
+                <button
+                  style={{
+                    display: "block",
+                    width: "100%",
+                    background: "none",
+                    border: "none",
+                    padding: "0.5em 1em",
+                    textAlign: "left",
+                    cursor: "pointer",
+                    color: "#003365",
+                    fontWeight: 500,
+                    fontSize: 15,
+                    transition: "color 0.2s"
+                  }}
+                  onMouseEnter={e => (e.currentTarget.style.color = "#0057AC")}
+                  onMouseLeave={e => (e.currentTarget.style.color = "#003365")}
+                  onClick={() => setDropdownOpen(null)}
+                >
+                   አማርኛ (Amharic)
+                </button>
+                {/* Hausa */}
+                <button
+                  style={{
+                    display: "block",
+                    width: "100%",
+                    background: "none",
+                    border: "none",
+                    padding: "0.5em 1em",
+                    textAlign: "left",
+                    cursor: "pointer",
+                    color: "#003365",
+                    fontWeight: 500,
+                    fontSize: 15,
+                    transition: "color 0.2s"
+                  }}
+                  onMouseEnter={e => (e.currentTarget.style.color = "#0057AC")}
+                  onMouseLeave={e => (e.currentTarget.style.color = "#003365")}
+                  onClick={() => setDropdownOpen(null)}
+                >
+                  Hausa
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
       {/* Mobile Menu */}
       {menuOpen && (
