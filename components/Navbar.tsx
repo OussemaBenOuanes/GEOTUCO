@@ -140,12 +140,36 @@ export default function Navbar() {
                 <Link
                   href={`/${slug}`}
                   className={
-                    isActive(slug) || isParentActive(children)
+                    (isActive(slug) ||
+                      isParentActive(children) ||
+                      (slug === "services" &&
+                        (
+                          isActive("training") ||
+                          pathname === "/training" ||
+                          isActive("geotechnical-engineering") ||
+                          pathname === "/geotechnical-engineering" ||
+                          isActive("geotechnical-tests") ||
+                          pathname === "/geotechnical-tests"
+                        )
+                      )
+                    )
                       ? "font-medium"
                       : "text-[#495867] font-medium hover:text-[#003365]"
                   }
                   style={
-                    isActive(slug) || isParentActive(children)
+                    (isActive(slug) ||
+                      isParentActive(children) ||
+                      (slug === "services" &&
+                        (
+                          isActive("training") ||
+                          pathname === "/training" ||
+                          isActive("geotechnical-engineering") ||
+                          pathname === "/geotechnical-engineering" ||
+                          isActive("geotechnical-tests") ||
+                          pathname === "/geotechnical-tests"
+                        )
+                      )
+                    )
                       ? {
                           background: "linear-gradient(85deg, #003365 54.3%, #0057AC 100%)",
                           WebkitBackgroundClip: "text",
@@ -486,7 +510,7 @@ export default function Navbar() {
                   onMouseLeave={e => (e.currentTarget.style.color = "#003365")}
                   onClick={() => setDropdownOpen(null)}
                 >
-                    አማርኛ (Amharic)
+                      አማርኛ (Amharic)
                 </button>
                 {/* Hausa */}
                 <button
@@ -942,7 +966,7 @@ export default function Navbar() {
                     onMouseLeave={e => (e.currentTarget.style.color = "#003365")}
                     onClick={() => setMenuOpen(false)}
                   >
-                       አማርኛ (Amharic)
+                        አማርኛ (Amharic)
                   </button>
                   <button
                     style={{
