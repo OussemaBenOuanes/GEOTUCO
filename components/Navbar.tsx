@@ -296,13 +296,17 @@ export default function Navbar() {
                 if (langHoverTimeout.current) clearTimeout(langHoverTimeout.current);
                 langHoverTimeout.current = setTimeout(() => setDropdownOpen(null), 180);
                 }}
-              >
+                >
                 <img
-                src="https://www.svgrepo.com/show/506518/language.svg"
-                alt="Language"
-                width={22}
-                height={22}
-                style={{ display: "inline-block", transition: "filter 0.2s" }}
+                  src="https://www.svgrepo.com/show/506518/language.svg"
+                  alt="Language"
+                  width={22}
+                  height={22}
+                  style={{
+                  display: "inline-block",
+                  transition: "filter 0.2s",
+                  filter: "invert(32%) sepia(7%) saturate(1049%) hue-rotate(176deg) brightness(97%) contrast(87%)"
+                  }}
                 />
                 <svg width="14" height="14" style={{ marginLeft: 4, transition: "stroke 0.2s" }} viewBox="0 0 20 20" fill="none">
                 <path d="M6 8l4 4 4-4" stroke="#495867" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -338,13 +342,13 @@ export default function Navbar() {
                     padding: "0.5em 1em",
                     textAlign: "left",
                     cursor: "pointer",
-                    color: "#003365",
+                    color: "#495867",
                     fontWeight: 500,
                     fontSize: 15,
                     transition: "color 0.2s"
                   }}
                   onMouseEnter={e => (e.currentTarget.style.color = "#0057AC")}
-                  onMouseLeave={e => (e.currentTarget.style.color = "#003365")}
+                  onMouseLeave={e => (e.currentTarget.style.color = "#495867")}
                   onClick={() => setDropdownOpen(null)}
                 >
                   English
@@ -358,13 +362,13 @@ export default function Navbar() {
                     padding: "0.5em 1em",
                     textAlign: "left",
                     cursor: "pointer",
-                    color: "#003365",
+                    color: "#495867", // changed from #003365
                     fontWeight: 500,
                     fontSize: 15,
                     transition: "color 0.2s"
                   }}
                   onMouseEnter={e => (e.currentTarget.style.color = "#0057AC")}
-                  onMouseLeave={e => (e.currentTarget.style.color = "#003365")}
+                  onMouseLeave={e => (e.currentTarget.style.color = "#495867")}
                   onClick={() => setDropdownOpen(null)}
                 >
                   Français
@@ -378,13 +382,13 @@ export default function Navbar() {
                     padding: "0.5em 1em",
                     textAlign: "left",
                     cursor: "pointer",
-                    color: "#003365",
+                    color: "#495867", // changed from #003365
                     fontWeight: 500,
                     fontSize: 15,
                     transition: "color 0.2s"
                   }}
                   onMouseEnter={e => (e.currentTarget.style.color = "#0057AC")}
-                  onMouseLeave={e => (e.currentTarget.style.color = "#003365")}
+                  onMouseLeave={e => (e.currentTarget.style.color = "#495867")}
                   onClick={() => setDropdownOpen(null)}
                 >
                   العربية
@@ -398,13 +402,13 @@ export default function Navbar() {
                     padding: "0.5em 1em",
                     textAlign: "left",
                     cursor: "pointer",
-                    color: "#003365",
+                    color: "#495867", // changed from #003365
                     fontWeight: 500,
                     fontSize: 15,
                     transition: "color 0.2s"
                   }}
                   onMouseEnter={e => (e.currentTarget.style.color = "#0057AC")}
-                  onMouseLeave={e => (e.currentTarget.style.color = "#003365")}
+                  onMouseLeave={e => (e.currentTarget.style.color = "#495867")}
                   onClick={() => setDropdownOpen(null)}
                 >
                   Español
@@ -418,13 +422,13 @@ export default function Navbar() {
                     padding: "0.5em 1em",
                     textAlign: "left",
                     cursor: "pointer",
-                    color: "#003365",
+                    color: "#495867", // changed from #003365
                     fontWeight: 500,
                     fontSize: 15,
                     transition: "color 0.2s"
                   }}
                   onMouseEnter={e => (e.currentTarget.style.color = "#0057AC")}
-                  onMouseLeave={e => (e.currentTarget.style.color = "#003365")}
+                  onMouseLeave={e => (e.currentTarget.style.color = "#495867")}
                   onClick={() => setDropdownOpen(null)}
                 >
                   Deutsch
@@ -438,13 +442,13 @@ export default function Navbar() {
                     padding: "0.5em 1em",
                     textAlign: "left",
                     cursor: "pointer",
-                    color: "#003365",
+                    color: "#495867", // changed from #003365
                     fontWeight: 500,
                     fontSize: 15,
                     transition: "color 0.2s"
                   }}
                   onMouseEnter={e => (e.currentTarget.style.color = "#0057AC")}
-                  onMouseLeave={e => (e.currentTarget.style.color = "#003365")}
+                  onMouseLeave={e => (e.currentTarget.style.color = "#495867")}
                   onClick={() => setDropdownOpen(null)}
                 >
                   Italiano
@@ -459,13 +463,13 @@ export default function Navbar() {
                     padding: "0.5em 1em",
                     textAlign: "left",
                     cursor: "pointer",
-                    color: "#003365",
+                    color: "#495867", // changed from #003365
                     fontWeight: 500,
                     fontSize: 15,
                     transition: "color 0.2s"
                   }}
                   onMouseEnter={e => (e.currentTarget.style.color = "#0057AC")}
-                  onMouseLeave={e => (e.currentTarget.style.color = "#003365")}
+                  onMouseLeave={e => (e.currentTarget.style.color = "#495867")}
                   onClick={() => setDropdownOpen(null)}
                 >
                   中文 (Chinese)
@@ -480,13 +484,13 @@ export default function Navbar() {
                     padding: "0.5em 1em",
                     textAlign: "left",
                     cursor: "pointer",
-                    color: "#003365",
+                    color: "#495867", // changed from #003365
                     fontWeight: 500,
                     fontSize: 15,
                     transition: "color 0.2s"
                   }}
                   onMouseEnter={e => (e.currentTarget.style.color = "#0057AC")}
-                  onMouseLeave={e => (e.currentTarget.style.color = "#003365")}
+                  onMouseLeave={e => (e.currentTarget.style.color = "#495867")}
                   onClick={() => setDropdownOpen(null)}
                 >
                   Kiswahili
@@ -501,13 +505,13 @@ export default function Navbar() {
                     padding: "0.5em 1em",
                     textAlign: "left",
                     cursor: "pointer",
-                    color: "#003365",
+                    color: "#495867", // changed from #003365
                     fontWeight: 500,
                     fontSize: 15,
                     transition: "color 0.2s"
                   }}
                   onMouseEnter={e => (e.currentTarget.style.color = "#0057AC")}
-                  onMouseLeave={e => (e.currentTarget.style.color = "#003365")}
+                  onMouseLeave={e => (e.currentTarget.style.color = "#495867")}
                   onClick={() => setDropdownOpen(null)}
                 >
                       አማርኛ (Amharic)
@@ -522,13 +526,13 @@ export default function Navbar() {
                     padding: "0.5em 1em",
                     textAlign: "left",
                     cursor: "pointer",
-                    color: "#003365",
+                    color: "#495867", // changed from #003365
                     fontWeight: 500,
                     fontSize: 15,
                     transition: "color 0.2s"
                   }}
                   onMouseEnter={e => (e.currentTarget.style.color = "#0057AC")}
-                  onMouseLeave={e => (e.currentTarget.style.color = "#003365")}
+                  onMouseLeave={e => (e.currentTarget.style.color = "#495867")}
                   onClick={() => setDropdownOpen(null)}
                 >
                   Hausa
@@ -777,13 +781,13 @@ export default function Navbar() {
                       padding: "0.5em 1em",
                       textAlign: "left",
                       cursor: "pointer",
-                      color: "#003365",
+                      color: "#495867", // changed from #003365
                       fontWeight: 500,
                       fontSize: 15,
                       transition: "color 0.2s"
                     }}
                     onMouseEnter={e => (e.currentTarget.style.color = "#0057AC")}
-                    onMouseLeave={e => (e.currentTarget.style.color = "#003365")}
+                    onMouseLeave={e => (e.currentTarget.style.color = "#495867")}
                     onClick={() => setMenuOpen(false)}
                   >
                     English
@@ -797,13 +801,13 @@ export default function Navbar() {
                       padding: "0.5em 1em",
                       textAlign: "left",
                       cursor: "pointer",
-                      color: "#003365",
+                      color: "#495867", // changed from #003365
                       fontWeight: 500,
                       fontSize: 15,
                       transition: "color 0.2s"
                     }}
                     onMouseEnter={e => (e.currentTarget.style.color = "#0057AC")}
-                    onMouseLeave={e => (e.currentTarget.style.color = "#003365")}
+                    onMouseLeave={e => (e.currentTarget.style.color = "#495867")}
                     onClick={() => setMenuOpen(false)}
                   >
                     Français
@@ -817,13 +821,13 @@ export default function Navbar() {
                       padding: "0.5em 1em",
                       textAlign: "left",
                       cursor: "pointer",
-                      color: "#003365",
+                      color: "#495867", // changed from #003365
                       fontWeight: 500,
                       fontSize: 15,
                       transition: "color 0.2s"
                     }}
                     onMouseEnter={e => (e.currentTarget.style.color = "#0057AC")}
-                    onMouseLeave={e => (e.currentTarget.style.color = "#003365")}
+                    onMouseLeave={e => (e.currentTarget.style.color = "#495867")}
                     onClick={() => setMenuOpen(false)}
                   >
                     العربية
@@ -837,13 +841,13 @@ export default function Navbar() {
                       padding: "0.5em 1em",
                       textAlign: "left",
                       cursor: "pointer",
-                      color: "#003365",
+                      color: "#495867", // changed from #003365
                       fontWeight: 500,
                       fontSize: 15,
                       transition: "color 0.2s"
                     }}
                     onMouseEnter={e => (e.currentTarget.style.color = "#0057AC")}
-                    onMouseLeave={e => (e.currentTarget.style.color = "#003365")}
+                    onMouseLeave={e => (e.currentTarget.style.color = "#495867")}
                     onClick={() => setMenuOpen(false)}
                   >
                     Español
@@ -857,13 +861,13 @@ export default function Navbar() {
                       padding: "0.5em 1em",
                       textAlign: "left",
                       cursor: "pointer",
-                      color: "#003365",
+                      color: "#495867", // changed from #003365
                       fontWeight: 500,
                       fontSize: 15,
                       transition: "color 0.2s"
                     }}
                     onMouseEnter={e => (e.currentTarget.style.color = "#0057AC")}
-                    onMouseLeave={e => (e.currentTarget.style.color = "#003365")}
+                    onMouseLeave={e => (e.currentTarget.style.color = "#495867")}
                     onClick={() => setMenuOpen(false)}
                   >
                     Deutsch
@@ -877,13 +881,13 @@ export default function Navbar() {
                       padding: "0.5em 1em",
                       textAlign: "left",
                       cursor: "pointer",
-                      color: "#003365",
+                      color: "#495867", // changed from #003365
                       fontWeight: 500,
                       fontSize: 15,
                       transition: "color 0.2s"
                     }}
                     onMouseEnter={e => (e.currentTarget.style.color = "#0057AC")}
-                    onMouseLeave={e => (e.currentTarget.style.color = "#003365")}
+                    onMouseLeave={e => (e.currentTarget.style.color = "#495867")}
                     onClick={() => setMenuOpen(false)}
                   >
                     Italiano
@@ -897,13 +901,13 @@ export default function Navbar() {
                       padding: "0.5em 1em",
                       textAlign: "left",
                       cursor: "pointer",
-                      color: "#003365",
+                      color: "#495867", // changed from #003365
                       fontWeight: 500,
                       fontSize: 15,
                       transition: "color 0.2s"
                     }}
                     onMouseEnter={e => (e.currentTarget.style.color = "#0057AC")}
-                    onMouseLeave={e => (e.currentTarget.style.color = "#003365")}
+                    onMouseLeave={e => (e.currentTarget.style.color = "#495867")}
                     onClick={() => setMenuOpen(false)}
                   >
                     中文 (Chinese)
@@ -917,13 +921,13 @@ export default function Navbar() {
                       padding: "0.5em 1em",
                       textAlign: "left",
                       cursor: "pointer",
-                      color: "#003365",
+                      color: "#495867", // changed from #003365
                       fontWeight: 500,
                       fontSize: 15,
                       transition: "color 0.2s"
                     }}
                     onMouseEnter={e => (e.currentTarget.style.color = "#0057AC")}
-                    onMouseLeave={e => (e.currentTarget.style.color = "#003365")}
+                    onMouseLeave={e => (e.currentTarget.style.color = "#495867")}
                     onClick={() => setMenuOpen(false)}
                   >
                     Kiswahili
@@ -937,13 +941,13 @@ export default function Navbar() {
                       padding: "0.5em 1em",
                       textAlign: "left",
                       cursor: "pointer",
-                      color: "#003365",
+                      color: "#495867", // changed from #003365
                       fontWeight: 500,
                       fontSize: 15,
                       transition: "color 0.2s"
                     }}
                     onMouseEnter={e => (e.currentTarget.style.color = "#0057AC")}
-                    onMouseLeave={e => (e.currentTarget.style.color = "#003365")}
+                    onMouseLeave={e => (e.currentTarget.style.color = "#495867")}
                     onClick={() => setMenuOpen(false)}
                   >
                     Yorùbá
@@ -957,13 +961,13 @@ export default function Navbar() {
                       padding: "0.5em 1em",
                       textAlign: "left",
                       cursor: "pointer",
-                      color: "#003365",
+                      color: "#495867", // changed from #003365
                       fontWeight: 500,
                       fontSize: 15,
                       transition: "color 0.2s"
                     }}
                     onMouseEnter={e => (e.currentTarget.style.color = "#0057AC")}
-                    onMouseLeave={e => (e.currentTarget.style.color = "#003365")}
+                    onMouseLeave={e => (e.currentTarget.style.color = "#495867")}
                     onClick={() => setMenuOpen(false)}
                   >
                         አማርኛ (Amharic)
@@ -977,13 +981,13 @@ export default function Navbar() {
                       padding: "0.5em 1em",
                       textAlign: "left",
                       cursor: "pointer",
-                      color: "#003365",
+                      color: "#495867", // changed from #003365
                       fontWeight: 500,
                       fontSize: 15,
                       transition: "color 0.2s"
                     }}
                     onMouseEnter={e => (e.currentTarget.style.color = "#0057AC")}
-                    onMouseLeave={e => (e.currentTarget.style.color = "#003365")}
+                    onMouseLeave={e => (e.currentTarget.style.color = "#495867")}
                     onClick={() => setMenuOpen(false)}
                   >
                     Hausa
