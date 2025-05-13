@@ -38,11 +38,16 @@ const translations = {
 
 export default function Home() {
   const [language, setLanguage] = useState("en");
+  const [isMobile, setIsMobile] = useState(false);
 
-  // Detect browser language
+  // Detect browser language and set mobile state
   useEffect(() => {
     const browserLang = navigator.language.startsWith("fr") ? "fr" : "en";
     setLanguage(browserLang);
+    setIsMobile(typeof window !== "undefined" && window.innerWidth <= 768);
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   const t = translations[language];
@@ -260,10 +265,13 @@ export default function Home() {
                     style={{ width: '100%', height: '100%', willChange: 'transform', cursor: 'pointer' }}
                     onClick={() => scrollTo(idx)}
                   >
+                    {/* For mobile: eager load and set width/height */}
                     <img
                       src={item.src}
                       alt={item.title}
-                      loading="lazy"
+                      loading={isMobile ? undefined : "lazy"}
+                      width={isMobile ? 400 : undefined}
+                      height={isMobile ? 250 : undefined}
                       style={{
                         width: '100%',
                         height: '100%',
@@ -281,14 +289,23 @@ export default function Home() {
                         width: '100%',
                         background: 'linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(13, 25, 37, 0.55) 100%)',
                         color: '#fff',
-                        padding: '2.5rem 2.5rem 2.5rem 2.5rem',
+                        // Responsive padding and layout
+                        padding: isMobile
+                          ? '1.1rem 1rem 1.2rem 1rem'
+                          : '2.5rem 2.5rem 2.5rem 2.5rem',
                         borderBottomLeftRadius: 12,
                         borderBottomRightRadius: 12,
                         boxSizing: 'border-box',
                         display: 'flex',
-                        flexDirection: 'row',
-                        alignItems: 'flex-end',
-                        gap: '1.1rem',
+                        flexDirection: isMobile
+                          ? 'column'
+                          : 'row',
+                        alignItems: isMobile
+                          ? 'flex-start'
+                          : 'flex-end',
+                        gap: isMobile
+                          ? '0.7rem'
+                          : '1.1rem',
                         opacity: selectedIndex === idx ? 1 : 0,
                         pointerEvents: selectedIndex === idx ? 'auto' : 'none',
                         transform: selectedIndex === idx ? 'scale(1)' : 'scale(0.92)',
@@ -304,15 +321,21 @@ export default function Home() {
                         minWidth: 0
                       }}>
                         <div style={{
-                          fontSize: '2.2rem',
+                          fontSize: isMobile
+                            ? '1.25rem'
+                            : '2.2rem',
                           fontWeight: 700,
-                          marginBottom: 18,
+                          marginBottom: isMobile
+                            ? 10
+                            : 18,
                           lineHeight: 1.1
                         }}>
                           {item.title}
                         </div>
                         <div style={{
-                          fontSize: '1.15rem',
+                          fontSize: isMobile
+                            ? '0.98rem'
+                            : '1.15rem',
                           opacity: 0.92,
                           marginBottom: 0,
                           fontWeight: 400,
@@ -325,7 +348,12 @@ export default function Home() {
                       <div
                         style={{
                           display: 'flex',
-                          alignItems: 'flex-end',
+                          alignItems: isMobile
+                            ? 'flex-start'
+                            : 'flex-end',
+                          marginTop: isMobile
+                            ? 12
+                            : 0
                         }}
                       >
                         <button
@@ -337,7 +365,9 @@ export default function Home() {
                             color: '#fff',
                             border: '2px solid #fff',
                             borderRadius: 12,
-                            padding: '0.65em 1.5em',
+                            padding: isMobile
+                              ? '0.5em 1.1em'
+                              : '0.65em 1.5em',
                             fontWeight: 500,
                             fontSize: 'clamp(0.95rem, 1.5vw, 1.1rem)',
                             cursor: 'pointer',

@@ -106,6 +106,29 @@ export default async function DynamicPage({ params }: { params: Promise<{ slug: 
     );
   }
 
+  if (slug === "training") {
+    return (
+      <>
+        <title>Training | GEOTUCO</title>
+        <main style={{ padding: '2rem', fontFamily: 'sans-serif', maxWidth: 900, margin: '0 auto' }}>
+          <h1 style={{ fontSize: '2.2rem', color: '#2a4d69', fontWeight: 800, marginBottom: '2rem', textAlign: 'center' }}>
+            Training
+          </h1>
+          <div style={{ color: '#444', fontSize: '1.15rem', marginBottom: '1.5rem', textAlign: 'center' }}>
+            GEOTUCO offers specialized training programs in geotechnical engineering, laboratory testing, and field investigation techniques. Our courses are designed for engineers, technicians, and students seeking to enhance their practical skills and theoretical knowledge in the geotechnical field.
+          </div>
+          <ul style={{ color: '#4b5d67', fontSize: '1rem', maxWidth: 600, margin: '0 auto', lineHeight: 1.7 }}>
+            <li>✔️ Hands-on training in soil and rock testing</li>
+            <li>✔️ Workshops on geotechnical investigation methods</li>
+            <li>✔️ Software training for geotechnical analysis</li>
+            <li>✔️ Customized courses for organizations and universities</li>
+            <li>✔️ Certification upon completion</li>
+          </ul>
+        </main>
+      </>
+    );
+  }
+
   if (slug === "softwares") {
     // Redirect to /geoprog instead of rendering a page here
     if (typeof window !== "undefined") {

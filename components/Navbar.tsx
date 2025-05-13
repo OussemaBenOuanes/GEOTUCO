@@ -9,7 +9,8 @@ const NAV_PAGES = [
   { label: "About", slug: "about" },
   { label: "Services", slug: "services", children: [
       { label: "Geotechnical Engineering", slug: "geotechnical-engineering" },
-      { label: "Geotechnical Tests", slug: "geotechnical-tests" }
+      { label: "Geotechnical Tests", slug: "geotechnical-tests" },
+      { label: "Training", slug: "training" } // Added Training
     ]
   },
   // Change "Softwares" to point to /geoprog, and children slugs remain the same
@@ -33,7 +34,8 @@ const NAV_PAGES = [
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [dropdownOpen, setDropdownOpen] = useState<string | null>(null); // Track which dropdown is open
+  const [dropdownOpen, setDropdownOpen] = useState<string | null>(null); // desktop dropdown
+  const [mobileDropdownOpen, setMobileDropdownOpen] = useState<string | null>(null); // mobile dropdown
   const dropdownTimeout = React.useRef<NodeJS.Timeout | null>(null);
   const langHoverTimeout = React.useRef<NodeJS.Timeout | null>(null);
   const pathname = usePathname();
@@ -79,14 +81,19 @@ export default function Navbar() {
         {/* Hamburger Icon */}
         <button
           className="md:hidden flex items-center px-2 py-1 rounded text-[#189ab4] focus:outline-none"
+          style={{
+            marginLeft: "auto"
+          }}
           onClick={() => setMenuOpen((v) => !v)}
-          aria-label="Toggle navigation menu"
+          aria-label={menuOpen ? "Close navigation menu" : "Toggle navigation menu"}
         >
           <svg width="28" height="28" fill="none" viewBox="0 0 24 24">
             <path
-              d={menuOpen
-                ? "M6 18L18 6M6 6l12 12"
-                : "M3 6h18M3 12h18M3 18h18"}
+              d={
+                menuOpen
+                  ? "M6 18L18 6M6 6l12 12"
+                  : "M3 6h18M3 12h18M3 18h18"
+              }
               stroke="#189ab4"
               strokeWidth="2"
               strokeLinecap="round"
@@ -227,8 +234,8 @@ export default function Navbar() {
           >
             Get started
           </Link>
-          {/* Language Dropdown */}
-          <div style={{ position: "relative" }}>
+          {/* Language Dropdown - only show on desktop */}
+          <div className="hidden md:block" style={{ position: "relative" }}>
             <button
               type="button"
               aria-label="Select language"
@@ -479,28 +486,7 @@ export default function Navbar() {
                   onMouseLeave={e => (e.currentTarget.style.color = "#003365")}
                   onClick={() => setDropdownOpen(null)}
                 >
-                  Yorùbá
-                </button>
-                {/* Amharic */}
-                <button
-                  style={{
-                    display: "block",
-                    width: "100%",
-                    background: "none",
-                    border: "none",
-                    padding: "0.5em 1em",
-                    textAlign: "left",
-                    cursor: "pointer",
-                    color: "#003365",
-                    fontWeight: 500,
-                    fontSize: 15,
-                    transition: "color 0.2s"
-                  }}
-                  onMouseEnter={e => (e.currentTarget.style.color = "#0057AC")}
-                  onMouseLeave={e => (e.currentTarget.style.color = "#003365")}
-                  onClick={() => setDropdownOpen(null)}
-                >
-                   አማርኛ (Amharic)
+                    አማርኛ (Amharic)
                 </button>
                 {/* Hausa */}
                 <button
@@ -530,8 +516,33 @@ export default function Navbar() {
       </div>
       {/* Mobile Menu */}
       {menuOpen && (
-        <div className="md:hidden bg-white border-t border-gray-100 px-4 pb-4">
-          <div className="flex flex-col gap-3 mt-2">
+        <div
+          className="md:hidden"
+          style={{
+            position: "absolute",
+            top: "100%",
+            left: 0,
+            width: "100vw",
+            minHeight: "calc(100vh - 64px)", // adjust if navbar height changes
+            zIndex: 100,
+            background: "#fff",
+            overflowY: "auto",
+            transition: "opacity 0.35s cubic-bezier(.4,0,.2,1), transform 0.35s cubic-bezier(.4,0,.2,1)",
+            opacity: menuOpen ? 1 : 0,
+            transform: menuOpen ? "translateY(0)" : "translateY(-32px)",
+            pointerEvents: menuOpen ? "auto" : "none"
+          }}
+        >
+          <div
+            className="border-t border-gray-100 px-4 pb-4 flex flex-col gap-3 mt-2"
+            style={{
+              maxWidth: 420,
+              margin: "0 auto",
+              minHeight: "100vh",
+              paddingTop: 24,
+              position: "relative"
+            }}
+          >
             {NAV_PAGES.map(({ label, slug, children }) =>
               !children ? (
                 <Link
@@ -559,26 +570,74 @@ export default function Navbar() {
               ) : (
                 <div key={label}>
                   <button
-                    className="w-full text-left font-medium py-2"
-                    onClick={() => setServicesOpen((v) => !v)}
+                    className={
+                      (isActive(slug) || isParentActive(children))
+                        ? "w-full text-left font-medium py-2 flex items-center justify-between"
+                        : "w-full text-left text-[#495867] font-medium hover:text-[#003365] py-2 flex items-center justify-between"
+                    }
+                    style={
+                      (isActive(slug) || isParentActive(children))
+                        ? {
+                            background: "linear-gradient(85deg, #003365 54.3%, #0057AC 100%)",
+                            WebkitBackgroundClip: "text",
+                            WebkitTextFillColor: "transparent",
+                            transition: "background 0.3s"
+                          }
+                        : undefined
+                    }
+                    onClick={() =>
+                      setMobileDropdownOpen(
+                        mobileDropdownOpen === slug ? null : slug
+                      )
+                    }
+                    aria-expanded={mobileDropdownOpen === slug}
+                    aria-controls={`mobile-dropdown-${slug}`}
                   >
-                    {label}
+                    <span>{label}</span>
+                    <svg
+                      width="18"
+                      height="18"
+                      viewBox="0 0 20 20"
+                      fill="none"
+                      style={{
+                        transform:
+                          mobileDropdownOpen === slug
+                            ? "rotate(180deg)"
+                            : "rotate(0deg)",
+                        transition: "transform 0.2s"
+                      }}
+                    >
+                      <path
+                        d="M6 8l4 4 4-4"
+                        stroke="#495867"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
                   </button>
-                  {setServicesOpen && (
-                    <div className="flex flex-col pl-4">
+                  {mobileDropdownOpen === slug && (
+                    <div
+                      id={`mobile-dropdown-${slug}`}
+                      className="flex flex-col pl-4"
+                      style={{
+                        borderRadius: 8,
+                        marginBottom: 8,
+                        marginTop: 2
+                      }}
+                    >
                       {children.map((child) => (
                         <Link
                           key={child.label}
                           href={
-                            // Only software children are under /geoprog
                             label === "Softwares"
                               ? `/geoprog/${child.slug}`
                               : `/${child.slug}`
                           }
                           className={
                             isActive(child.slug)
-                              ? "font-medium"
-                              : "text-[#495867] font-medium"
+                              ? "font-medium py-2"
+                              : "text-[#495867] font-medium py-2"
                           }
                           style={
                             isActive(child.slug)
@@ -620,6 +679,294 @@ export default function Navbar() {
             >
               Get started
             </Link>
+            {/* Language menu for mobile */}
+            <div className="flex flex-col gap-1 mt-4">
+              <div
+                style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4, cursor: "pointer" }}
+                onClick={() =>
+                  setMobileDropdownOpen(
+                    mobileDropdownOpen === "lang" ? null : "lang"
+                  )
+                }
+                aria-label="Toggle language menu"
+                aria-expanded={mobileDropdownOpen === "lang"}
+                aria-controls="mobile-lang-dropdown"
+              >
+                <img
+                  src="https://www.svgrepo.com/show/506518/language.svg"
+                  alt="Language"
+                  width={22}
+                  height={22}
+                  style={{ display: "inline-block" }}
+                />
+                <span style={{ fontWeight: 600, color: "#003365", fontSize: 16 }}>Language</span>
+                <button
+                  className="ml-auto"
+                  style={{
+                    background: "none",
+                    border: "none",
+                    padding: 4,
+                    cursor: "pointer"
+                  }}
+                  tabIndex={-1}
+                  aria-hidden="true"
+                >
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                    style={{
+                      transform:
+                        mobileDropdownOpen === "lang"
+                          ? "rotate(180deg)"
+                          : "rotate(0deg)",
+                      transition: "transform 0.2s"
+                    }}
+                  >
+                    <path
+                      d="M6 8l4 4 4-4"
+                      stroke="#495867"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </button>
+              </div>
+              {mobileDropdownOpen === "lang" && (
+                <div
+                  id="mobile-lang-dropdown"
+                  className="flex flex-col"
+                  style={{
+                    borderRadius: 8,
+                    marginBottom: 8,
+                    marginTop: 2
+                  }}
+                >
+                  <button
+                    style={{
+                      display: "block",
+                      width: "100%",
+                      background: "none",
+                      border: "none",
+                      padding: "0.5em 1em",
+                      textAlign: "left",
+                      cursor: "pointer",
+                      color: "#003365",
+                      fontWeight: 500,
+                      fontSize: 15,
+                      transition: "color 0.2s"
+                    }}
+                    onMouseEnter={e => (e.currentTarget.style.color = "#0057AC")}
+                    onMouseLeave={e => (e.currentTarget.style.color = "#003365")}
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    English
+                  </button>
+                  <button
+                    style={{
+                      display: "block",
+                      width: "100%",
+                      background: "none",
+                      border: "none",
+                      padding: "0.5em 1em",
+                      textAlign: "left",
+                      cursor: "pointer",
+                      color: "#003365",
+                      fontWeight: 500,
+                      fontSize: 15,
+                      transition: "color 0.2s"
+                    }}
+                    onMouseEnter={e => (e.currentTarget.style.color = "#0057AC")}
+                    onMouseLeave={e => (e.currentTarget.style.color = "#003365")}
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    Français
+                  </button>
+                  <button
+                    style={{
+                      display: "block",
+                      width: "100%",
+                      background: "none",
+                      border: "none",
+                      padding: "0.5em 1em",
+                      textAlign: "left",
+                      cursor: "pointer",
+                      color: "#003365",
+                      fontWeight: 500,
+                      fontSize: 15,
+                      transition: "color 0.2s"
+                    }}
+                    onMouseEnter={e => (e.currentTarget.style.color = "#0057AC")}
+                    onMouseLeave={e => (e.currentTarget.style.color = "#003365")}
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    العربية
+                  </button>
+                  <button
+                    style={{
+                      display: "block",
+                      width: "100%",
+                      background: "none",
+                      border: "none",
+                      padding: "0.5em 1em",
+                      textAlign: "left",
+                      cursor: "pointer",
+                      color: "#003365",
+                      fontWeight: 500,
+                      fontSize: 15,
+                      transition: "color 0.2s"
+                    }}
+                    onMouseEnter={e => (e.currentTarget.style.color = "#0057AC")}
+                    onMouseLeave={e => (e.currentTarget.style.color = "#003365")}
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    Español
+                  </button>
+                  <button
+                    style={{
+                      display: "block",
+                      width: "100%",
+                      background: "none",
+                      border: "none",
+                      padding: "0.5em 1em",
+                      textAlign: "left",
+                      cursor: "pointer",
+                      color: "#003365",
+                      fontWeight: 500,
+                      fontSize: 15,
+                      transition: "color 0.2s"
+                    }}
+                    onMouseEnter={e => (e.currentTarget.style.color = "#0057AC")}
+                    onMouseLeave={e => (e.currentTarget.style.color = "#003365")}
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    Deutsch
+                  </button>
+                  <button
+                    style={{
+                      display: "block",
+                      width: "100%",
+                      background: "none",
+                      border: "none",
+                      padding: "0.5em 1em",
+                      textAlign: "left",
+                      cursor: "pointer",
+                      color: "#003365",
+                      fontWeight: 500,
+                      fontSize: 15,
+                      transition: "color 0.2s"
+                    }}
+                    onMouseEnter={e => (e.currentTarget.style.color = "#0057AC")}
+                    onMouseLeave={e => (e.currentTarget.style.color = "#003365")}
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    Italiano
+                  </button>
+                  <button
+                    style={{
+                      display: "block",
+                      width: "100%",
+                      background: "none",
+                      border: "none",
+                      padding: "0.5em 1em",
+                      textAlign: "left",
+                      cursor: "pointer",
+                      color: "#003365",
+                      fontWeight: 500,
+                      fontSize: 15,
+                      transition: "color 0.2s"
+                    }}
+                    onMouseEnter={e => (e.currentTarget.style.color = "#0057AC")}
+                    onMouseLeave={e => (e.currentTarget.style.color = "#003365")}
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    中文 (Chinese)
+                  </button>
+                  <button
+                    style={{
+                      display: "block",
+                      width: "100%",
+                      background: "none",
+                      border: "none",
+                      padding: "0.5em 1em",
+                      textAlign: "left",
+                      cursor: "pointer",
+                      color: "#003365",
+                      fontWeight: 500,
+                      fontSize: 15,
+                      transition: "color 0.2s"
+                    }}
+                    onMouseEnter={e => (e.currentTarget.style.color = "#0057AC")}
+                    onMouseLeave={e => (e.currentTarget.style.color = "#003365")}
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    Kiswahili
+                  </button>
+                  <button
+                    style={{
+                      display: "block",
+                      width: "100%",
+                      background: "none",
+                      border: "none",
+                      padding: "0.5em 1em",
+                      textAlign: "left",
+                      cursor: "pointer",
+                      color: "#003365",
+                      fontWeight: 500,
+                      fontSize: 15,
+                      transition: "color 0.2s"
+                    }}
+                    onMouseEnter={e => (e.currentTarget.style.color = "#0057AC")}
+                    onMouseLeave={e => (e.currentTarget.style.color = "#003365")}
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    Yorùbá
+                  </button>
+                  <button
+                    style={{
+                      display: "block",
+                      width: "100%",
+                      background: "none",
+                      border: "none",
+                      padding: "0.5em 1em",
+                      textAlign: "left",
+                      cursor: "pointer",
+                      color: "#003365",
+                      fontWeight: 500,
+                      fontSize: 15,
+                      transition: "color 0.2s"
+                    }}
+                    onMouseEnter={e => (e.currentTarget.style.color = "#0057AC")}
+                    onMouseLeave={e => (e.currentTarget.style.color = "#003365")}
+                    onClick={() => setMenuOpen(false)}
+                  >
+                       አማርኛ (Amharic)
+                  </button>
+                  <button
+                    style={{
+                      display: "block",
+                      width: "100%",
+                      background: "none",
+                      border: "none",
+                      padding: "0.5em 1em",
+                      textAlign: "left",
+                      cursor: "pointer",
+                      color: "#003365",
+                      fontWeight: 500,
+                      fontSize: 15,
+                      transition: "color 0.2s"
+                    }}
+                    onMouseEnter={e => (e.currentTarget.style.color = "#0057AC")}
+                    onMouseLeave={e => (e.currentTarget.style.color = "#003365")}
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    Hausa
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       )}
