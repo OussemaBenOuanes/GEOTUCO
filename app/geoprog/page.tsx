@@ -7,9 +7,22 @@ export default function GeoprogPage() {
     <>
       <title>Softwares | GEOTUCO</title>
       <main style={{ padding: "2rem", fontFamily: "sans-serif", maxWidth: 900, margin: "0 auto" }}>
-        <h1 style={{ fontSize: "2.2rem", color: "#2a4d69", fontWeight: 800, marginBottom: "2rem", textAlign: "center" }}>
-          Softwares
-        </h1>
+        <div style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: "1.2rem",
+          marginBottom: "2rem"
+        }}>
+          <img
+            src="/GEOPROG Logo.svg"
+            alt="GEOPROG"
+            style={{ height: 44, width: "auto", display: "block" }}
+          />
+          <h1 style={{ fontSize: "2.6rem", color: "#023264", fontWeight: 800, margin: 0, textAlign: "center" }}>
+            Softwares
+          </h1>
+        </div>
         <div style={{
           display: "flex",
           gap: "2rem",
