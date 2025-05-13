@@ -64,6 +64,13 @@ export default function Navbar() {
     throw new Error('Function not implemented.');
   }
 
+  // Helper to scroll to top after navigation
+  const scrollToTop = () => {
+    if (typeof window !== "undefined") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+
   return (
     <nav className="w-full bg-white shadow-md sticky top-0 z-10">
       <div className="max-w-[1100px] mx-auto flex items-center justify-between px-4 md:px-8 py-3">
@@ -122,6 +129,7 @@ export default function Navbar() {
                       }
                     : undefined
                 }
+                onClick={scrollToTop}
               >
                 {label}
               </Link>
@@ -178,6 +186,7 @@ export default function Navbar() {
                         }
                       : undefined
                   }
+                  onClick={scrollToTop}
                 >
                   {label}
                 </Link>
@@ -226,6 +235,7 @@ export default function Navbar() {
                               }
                             : undefined
                         }
+                        onClick={scrollToTop}
                       >
                         {child.label}
                       </Link>
@@ -255,6 +265,7 @@ export default function Navbar() {
                 "linear-gradient(85deg, #003365 54.3%, #0057AC 100%)";
               (e.target as HTMLElement).style.boxShadow = "0 1px 2px rgba(0,0,0,0.04)";
             }}
+            onClick={scrollToTop}
           >
             Get started
           </Link>
@@ -514,7 +525,7 @@ export default function Navbar() {
                   onMouseLeave={e => (e.currentTarget.style.color = "#495867")}
                   onClick={() => setDropdownOpen(null)}
                 >
-                      አማርኛ (Amharic)
+                       አማርኛ (Amharic)
                 </button>
                 {/* Hausa */}
                 <button
@@ -591,7 +602,10 @@ export default function Navbar() {
                         }
                       : undefined
                   }
-                  onClick={() => setMenuOpen(false)}
+                  onClick={() => {
+                    setMenuOpen(false);
+                    scrollToTop();
+                  }}
                 >
                   {label}
                 </Link>
@@ -677,7 +691,10 @@ export default function Navbar() {
                                 }
                               : undefined
                           }
-                          onClick={() => setMenuOpen(false)}
+                          onClick={() => {
+                            setMenuOpen(false);
+                            scrollToTop();
+                          }}
                         >
                           {child.label}
                         </Link>
@@ -695,7 +712,10 @@ export default function Navbar() {
                 boxShadow: '0 1px 2px rgba(0,0,0,0.04)',
                 transition: "background 0.3s"
               }}
-              onClick={() => setMenuOpen(false)}
+              onClick={() => {
+                setMenuOpen(false);
+                scrollToTop();
+              }}
               onMouseEnter={e => {
                 (e.target as HTMLElement).style.background =
                   "linear-gradient(85deg, #003365 54.3%, #0057AC 100%)";
@@ -970,7 +990,7 @@ export default function Navbar() {
                     onMouseLeave={e => (e.currentTarget.style.color = "#495867")}
                     onClick={() => setMenuOpen(false)}
                   >
-                        አማርኛ (Amharic)
+                         አማርኛ (Amharic)
                   </button>
                   <button
                     style={{

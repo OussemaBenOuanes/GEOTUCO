@@ -1,6 +1,7 @@
 import React from "react";
 import { FloatingWhatsApp } from "react-floating-whatsapp";
 import './globals.css';
+import ScrollToTopOnRouteChange from "../components/ScrollToTopOnRouteChange";
 
 export const metadata = {
   title: 'GEOTUCO',
@@ -31,6 +32,7 @@ export default function RootLayout({
         {/* <title>GEOTUCO</title> */}
       </head>
       <body className="min-h-screen flex flex-col">
+        <ScrollToTopOnRouteChange />
         <Navbar />
         <main className="flex-1 flex flex-col">
           {children}
