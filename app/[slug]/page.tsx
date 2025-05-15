@@ -143,7 +143,7 @@ export default async function DynamicPage({ params }: { params: Promise<{ slug: 
     // Contact page with mailto form
     return (
       <>
-        <title>Contact Us | GEOTUCO</title>
+        {/* No <title> here, let ContactFormWithTitle handle it */}
         <ContactFormWithTitle />
       </>
     );
@@ -156,7 +156,7 @@ export default async function DynamicPage({ params }: { params: Promise<{ slug: 
     <>
       <title>{`${service.title} | GEOTUCO`}</title>
       <main style={{ padding: '2rem', fontFamily: 'sans-serif', maxWidth: 700, margin: '0 auto' }}>
-        <h1 style={{ fontSize: '2rem', color: '#2a4d69', marginBottom: '1rem' }}>{service.title}</h1>
+        <h1 style={{ fontSize: '2rem', color: '#003365', marginBottom: '1rem' }}>{service.title}</h1>
         <p style={{ fontSize: '1.15rem', color: '#444' }}>{service.description}</p>
       </main>
     </>
