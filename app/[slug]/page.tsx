@@ -1,7 +1,7 @@
-import React from 'react';
 import { notFound } from 'next/navigation';
 import { pages } from '../constants/pages';
 import Link from 'next/link';
+import ContactFormWithTitle from './ContactFormWithTitle';
 
 export default async function DynamicPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -137,6 +137,16 @@ export default async function DynamicPage({ params }: { params: Promise<{ slug: 
     }
     // For SSR, use a Next.js redirect
     return notFound();
+  }
+
+  if (slug === "contact") {
+    // Contact page with mailto form
+    return (
+      <>
+        <title>Contact Us | GEOTUCO</title>
+        <ContactFormWithTitle />
+      </>
+    );
   }
 
   const service = pages[slug];
