@@ -1,36 +1,8 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-
-// Define navbar pages for dynamic rendering
-const NAV_PAGES = [
-  { label: "Home", slug: "" },
-  { label: "About", slug: "about" },
-  { label: "Services", slug: "services", children: [
-      { label: "Geotechnical Engineering", slug: "geotechnical-engineering" },
-      { label: "Geotechnical Tests", slug: "geotechnical-tests" },
-      { label: "Training", slug: "training" } // Added Training
-    ]
-  },
-  // Change "Softwares" to point to /geoprog, and children slugs remain the same
-  { label: "Softwares", slug: "geoprog", children: [
-      { label: "GEOLOGA®", slug: "geologa" },
-      { label: "GEOPRES®", slug: "geopres" },
-      { label: "GEOPREC®", slug: "geoprec" },
-      { label: "GEOSTAT®", slug: "geostat" },
-      { label: "GEODYNA®", slug: "geodyna" },
-      { label: "GEOGRAN®", slug: "geogran" },
-      { label: "GEOLIMA®", slug: "geolima" },
-      { label: "GEOCOMP®", slug: "geocomp" },
-      { label: "GEOCONS®", slug: "geocons" },
-      { label: "GEOGONF®", slug: "geogonf" },
-      { label: "GEOCISA®", slug: "geocisa" },
-      { label: "GEOPROC®", slug: "geoproc" }
-    ]
-  },
-  { label: "Contact", slug: "contact" }
-];
+import { navbarTranslations } from '../translations/navbar';
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -39,6 +11,47 @@ export default function Navbar() {
   const dropdownTimeout = React.useRef<NodeJS.Timeout | null>(null);
   const langHoverTimeout = React.useRef<NodeJS.Timeout | null>(null);
   const pathname = usePathname();
+  const [language, setLanguage] = useState("en");
+
+  useEffect(() => {
+    let lang = localStorage.getItem("lang") || "en";
+    setLanguage(lang);
+    const handleStorage = (e: StorageEvent) => {
+      if (e.key === "lang" && e.newValue) setLanguage(e.newValue);
+    };
+    window.addEventListener("storage", handleStorage);
+    return () => window.removeEventListener("storage", handleStorage);
+  }, []);
+
+  const t = navbarTranslations[language] || navbarTranslations.en;
+
+  // Define navbar pages for dynamic rendering
+  const NAV_PAGES = [
+    { label: t.home, slug: "" },
+    { label: t.about, slug: "about" },
+    { label: t.services, slug: "services", children: [
+        { label: t.geotechnicalEngineering, slug: "geotechnical-engineering" },
+        { label: t.geotechnicalTests, slug: "geotechnical-tests" },
+        { label: t.training, slug: "training" }
+      ]
+    },
+    { label: t.softwares, slug: "geoprog", children: [
+        { label: t.geologa || "GEOLOGA®", slug: "geologa" },
+        { label: t.geopres || "GEOPRES®", slug: "geopres" },
+        { label: t.geoprec || "GEOPREC®", slug: "geoprec" },
+        { label: t.geostat || "GEOSTAT®", slug: "geostat" },
+        { label: t.geodyna || "GEODYNA®", slug: "geodyna" },
+        { label: t.geogran || "GEOGRAN®", slug: "geogran" },
+        { label: t.geolima || "GEOLIMA®", slug: "geolima" },
+        { label: t.geocomp || "GEOCOMP®", slug: "geocomp" },
+        { label: t.geocons || "GEOCONS®", slug: "geocons" },
+        { label: t.geogonf || "GEOGONF®", slug: "geogonf" },
+        { label: t.geocisa || "GEOCISA®", slug: "geocisa" },
+        { label: t.geoproc || "GEOPROC®", slug: "geoproc" }
+      ]
+    },
+    { label: t.contact, slug: "contact" }
+  ];
 
   // Helper to determine if a nav link is active
   const isActive = (slug: string) => {
@@ -88,19 +101,13 @@ export default function Navbar() {
         {/* Hamburger Icon */}
         <button
           className="md:hidden flex items-center px-2 py-1 rounded text-[#189ab4] focus:outline-none"
-          style={{
-            marginLeft: "auto"
-          }}
+          style={{ marginLeft: "auto" }}
           onClick={() => setMenuOpen((v) => !v)}
           aria-label={menuOpen ? "Close navigation menu" : "Toggle navigation menu"}
         >
           <svg width="28" height="28" fill="none" viewBox="0 0 24 24">
             <path
-              d={
-                menuOpen
-                  ? "M6 18L18 6M6 6l12 12"
-                  : "M3 6h18M3 12h18M3 18h18"
-              }
+              d={menuOpen ? "M6 18L18 6M6 6l12 12" : "M3 6h18M3 12h18M3 18h18"}
               stroke="#189ab4"
               strokeWidth="2"
               strokeLinecap="round"
@@ -109,33 +116,25 @@ export default function Navbar() {
         </button>
         {/* Navigation Links */}
         <div className="hidden md:flex gap-8 items-center">
-          {NAV_PAGES.map(({ label, slug, children }) => (
+          {NAV_PAGES.map(({ label, slug, children }) =>
             !children ? (
               <Link
-                key={label}
+                key={slug || "home"}
                 href={slug ? `/${slug}` : '/'}
-                className={
-                  isActive(slug)
-                    ? "font-medium"
-                    : "text-[#495867] font-medium hover:text-[#003365]"
-                }
-                style={
-                  isActive(slug)
-                    ? {
-                        background: "linear-gradient(85deg, #003365 54.3%, #0057AC 100%)",
-                        WebkitBackgroundClip: "text",
-                        WebkitTextFillColor: "transparent",
-                        transition: "background 0.3s"
-                      }
-                    : undefined
-                }
+                className={isActive(slug) ? "font-medium" : "text-[#495867] font-medium hover:text-[#003365]"}
+                style={isActive(slug) ? {
+                  background: "linear-gradient(85deg, #003365 54.3%, #0057AC 100%)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  transition: "background 0.3s"
+                } : undefined}
                 onClick={scrollToTop}
               >
                 {label}
               </Link>
             ) : (
               <div
-                key={label}
+                key={slug}
                 className="relative"
                 onMouseEnter={() => {
                   if (dropdownTimeout.current) clearTimeout(dropdownTimeout.current);
@@ -147,45 +146,37 @@ export default function Navbar() {
               >
                 <Link
                   href={`/${slug}`}
-                  className={
-                    (isActive(slug) ||
-                      isParentActive(children) ||
-                      (slug === "services" &&
-                        (
-                          isActive("training") ||
-                          pathname === "/training" ||
-                          isActive("geotechnical-engineering") ||
-                          pathname === "/geotechnical-engineering" ||
-                          isActive("geotechnical-tests") ||
-                          pathname === "/geotechnical-tests"
-                        )
+                  className={(isActive(slug) ||
+                    isParentActive(children) ||
+                    (slug === "services" &&
+                      (
+                        isActive("training") ||
+                        pathname === "/training" ||
+                        isActive("geotechnical-engineering") ||
+                        pathname === "/geotechnical-engineering" ||
+                        isActive("geotechnical-tests") ||
+                        pathname === "/geotechnical-tests"
                       )
                     )
-                      ? "font-medium"
-                      : "text-[#495867] font-medium hover:text-[#003365]"
-                  }
-                  style={
-                    (isActive(slug) ||
-                      isParentActive(children) ||
-                      (slug === "services" &&
-                        (
-                          isActive("training") ||
-                          pathname === "/training" ||
-                          isActive("geotechnical-engineering") ||
-                          pathname === "/geotechnical-engineering" ||
-                          isActive("geotechnical-tests") ||
-                          pathname === "/geotechnical-tests"
-                        )
+                  ) ? "font-medium" : "text-[#495867] font-medium hover:text-[#003365]"}
+                  style={(isActive(slug) ||
+                    isParentActive(children) ||
+                    (slug === "services" &&
+                      (
+                        isActive("training") ||
+                        pathname === "/training" ||
+                        isActive("geotechnical-engineering") ||
+                        pathname === "/geotechnical-engineering" ||
+                        isActive("geotechnical-tests") ||
+                        pathname === "/geotechnical-tests"
                       )
                     )
-                      ? {
-                          background: "linear-gradient(85deg, #003365 54.3%, #0057AC 100%)",
-                          WebkitBackgroundClip: "text",
-                          WebkitTextFillColor: "transparent",
-                          transition: "background 0.3s"
-                        }
-                      : undefined
-                  }
+                  ) ? {
+                    background: "linear-gradient(85deg, #003365 54.3%, #0057AC 100%)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    transition: "background 0.3s"
+                  } : undefined}
                   onClick={scrollToTop}
                 >
                   {label}
@@ -213,28 +204,15 @@ export default function Navbar() {
                   <div className="flex flex-col py-2">
                     {children.map((child) => (
                       <Link
-                        key={child.label}
-                        href={
-                          // All software children are under /geoprog/[slug]
-                          label === "Softwares"
-                            ? `/geoprog/${child.slug}`
-                            : `/${child.slug}`
-                        }
-                        className={
-                          isActive(child.slug)
-                            ? "px-5 py-2 font-medium"
-                            : "px-5 py-2 text-[#495867] font-medium hover:text-[#003365]"
-                        }
-                        style={
-                          isActive(child.slug)
-                            ? {
-                                background: "linear-gradient(85deg, #003365 54.3%, #0057AC 100%)",
-                                WebkitBackgroundClip: "text",
-                                WebkitTextFillColor: "transparent",
-                                transition: "background 0.3s"
-                              }
-                            : undefined
-                        }
+                        key={child.slug}
+                        href={label === t.softwares ? `/geoprog/${child.slug}` : `/${child.slug}`}
+                        className={isActive(child.slug) ? "px-5 py-2 font-medium" : "px-5 py-2 text-[#495867] font-medium hover:text-[#003365]"}
+                        style={isActive(child.slug) ? {
+                          background: "linear-gradient(85deg, #003365 54.3%, #0057AC 100%)",
+                          WebkitBackgroundClip: "text",
+                          WebkitTextFillColor: "transparent",
+                          transition: "background 0.3s"
+                        } : undefined}
                         onClick={scrollToTop}
                       >
                         {child.label}
@@ -244,7 +222,7 @@ export default function Navbar() {
                 </div>
               </div>
             )
-          ))}
+          )}
         </div>
         {/* Get Started Button */}
         <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
@@ -267,7 +245,7 @@ export default function Navbar() {
             }}
             onClick={scrollToTop}
           >
-            Get started
+            {t.getStarted}
           </Link>
           {/* Language Dropdown - only show on desktop */}
           <div className="hidden md:block" style={{ position: "relative" }}>
@@ -306,22 +284,22 @@ export default function Navbar() {
                 // UX: close menu after delay
                 if (langHoverTimeout.current) clearTimeout(langHoverTimeout.current);
                 langHoverTimeout.current = setTimeout(() => setDropdownOpen(null), 180);
-                }}
-                >
-                <img
-                  src="https://www.svgrepo.com/show/506518/language.svg"
-                  alt="Language"
-                  width={22}
-                  height={22}
-                  style={{
+              }}
+            >
+              <img
+                src="https://www.svgrepo.com/show/506518/language.svg"
+                alt="Language"
+                width={22}
+                height={22}
+                style={{
                   display: "inline-block",
                   transition: "filter 0.2s",
                   filter: "invert(32%) sepia(7%) saturate(1049%) hue-rotate(176deg) brightness(97%) contrast(87%)"
-                  }}
-                />
-                <svg width="14" height="14" style={{ marginLeft: 4, transition: "stroke 0.2s" }} viewBox="0 0 20 20" fill="none">
-                <path d="M6 8l4 4 4-4" stroke="#495867" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
+                }}
+              />
+              <svg width="14" height="14" style={{ marginLeft: 4, transition: "stroke 0.2s" }} viewBox="0 0 20 20" fill="none">
+                <path d="M6 8l4 4 4-4" stroke="#495867" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
             </button>
             {dropdownOpen === "lang" && (
               <div
@@ -360,7 +338,11 @@ export default function Navbar() {
                   }}
                   onMouseEnter={e => (e.currentTarget.style.color = "#0057AC")}
                   onMouseLeave={e => (e.currentTarget.style.color = "#495867")}
-                  onClick={() => setDropdownOpen(null)}
+                  onClick={() => {
+                    localStorage.setItem("lang", "en");
+                    setDropdownOpen(null);
+                    window.location.reload();
+                  }}
                 >
                   English
                 </button>
@@ -373,14 +355,18 @@ export default function Navbar() {
                     padding: "0.5em 1em",
                     textAlign: "left",
                     cursor: "pointer",
-                    color: "#495867", // changed from #003365
+                    color: "#495867",
                     fontWeight: 500,
                     fontSize: 15,
                     transition: "color 0.2s"
                   }}
                   onMouseEnter={e => (e.currentTarget.style.color = "#0057AC")}
                   onMouseLeave={e => (e.currentTarget.style.color = "#495867")}
-                  onClick={() => setDropdownOpen(null)}
+                  onClick={() => {
+                    localStorage.setItem("lang", "fr");
+                    setDropdownOpen(null);
+                    window.location.reload();
+                  }}
                 >
                   Français
                 </button>
@@ -393,7 +379,7 @@ export default function Navbar() {
                     padding: "0.5em 1em",
                     textAlign: "left",
                     cursor: "pointer",
-                    color: "#495867", // changed from #003365
+                    color: "#495867",
                     fontWeight: 500,
                     fontSize: 15,
                     transition: "color 0.2s"
@@ -413,7 +399,7 @@ export default function Navbar() {
                     padding: "0.5em 1em",
                     textAlign: "left",
                     cursor: "pointer",
-                    color: "#495867", // changed from #003365
+                    color: "#495867",
                     fontWeight: 500,
                     fontSize: 15,
                     transition: "color 0.2s"
@@ -433,7 +419,7 @@ export default function Navbar() {
                     padding: "0.5em 1em",
                     textAlign: "left",
                     cursor: "pointer",
-                    color: "#495867", // changed from #003365
+                    color: "#495867",
                     fontWeight: 500,
                     fontSize: 15,
                     transition: "color 0.2s"
@@ -453,7 +439,7 @@ export default function Navbar() {
                     padding: "0.5em 1em",
                     textAlign: "left",
                     cursor: "pointer",
-                    color: "#495867", // changed from #003365
+                    color: "#495867",
                     fontWeight: 500,
                     fontSize: 15,
                     transition: "color 0.2s"
@@ -474,7 +460,7 @@ export default function Navbar() {
                     padding: "0.5em 1em",
                     textAlign: "left",
                     cursor: "pointer",
-                    color: "#495867", // changed from #003365
+                    color: "#495867",
                     fontWeight: 500,
                     fontSize: 15,
                     transition: "color 0.2s"
@@ -495,7 +481,7 @@ export default function Navbar() {
                     padding: "0.5em 1em",
                     textAlign: "left",
                     cursor: "pointer",
-                    color: "#495867", // changed from #003365
+                    color: "#495867",
                     fontWeight: 500,
                     fontSize: 15,
                     transition: "color 0.2s"
@@ -516,7 +502,7 @@ export default function Navbar() {
                     padding: "0.5em 1em",
                     textAlign: "left",
                     cursor: "pointer",
-                    color: "#495867", // changed from #003365
+                    color: "#495867",
                     fontWeight: 500,
                     fontSize: 15,
                     transition: "color 0.2s"
@@ -525,7 +511,27 @@ export default function Navbar() {
                   onMouseLeave={e => (e.currentTarget.style.color = "#495867")}
                   onClick={() => setDropdownOpen(null)}
                 >
-                       አማርኛ (Amharic)
+                  Yorùbá
+                </button>
+                <button
+                  style={{
+                    display: "block",
+                    width: "100%",
+                    background: "none",
+                    border: "none",
+                    padding: "0.5em 1em",
+                    textAlign: "left",
+                    cursor: "pointer",
+                    color: "#495867",
+                    fontWeight: 500,
+                    fontSize: 15,
+                    transition: "color 0.2s"
+                  }}
+                  onMouseEnter={e => (e.currentTarget.style.color = "#0057AC")}
+                  onMouseLeave={e => (e.currentTarget.style.color = "#495867")}
+                  onClick={() => setDropdownOpen(null)}
+                >
+                           አማርኛ (Amharic)
                 </button>
                 {/* Hausa */}
                 <button
@@ -537,7 +543,7 @@ export default function Navbar() {
                     padding: "0.5em 1em",
                     textAlign: "left",
                     cursor: "pointer",
-                    color: "#495867", // changed from #003365
+                    color: "#495867",
                     fontWeight: 500,
                     fontSize: 15,
                     transition: "color 0.2s"
@@ -585,7 +591,7 @@ export default function Navbar() {
             {NAV_PAGES.map(({ label, slug, children }) =>
               !children ? (
                 <Link
-                  key={label}
+                  key={slug || "home"}
                   href={slug ? `/${slug}` : '/'}
                   className={
                     isActive(slug)
@@ -610,7 +616,7 @@ export default function Navbar() {
                   {label}
                 </Link>
               ) : (
-                <div key={label}>
+                <div key={slug}>
                   <button
                     className={
                       (isActive(slug) || isParentActive(children))
@@ -670,9 +676,9 @@ export default function Navbar() {
                     >
                       {children.map((child) => (
                         <Link
-                          key={child.label}
+                          key={child.slug}
                           href={
-                            label === "Softwares"
+                            label === t.softwares
                               ? `/geoprog/${child.slug}`
                               : `/${child.slug}`
                           }
@@ -725,7 +731,7 @@ export default function Navbar() {
                   "linear-gradient(85deg, #003365 54.3%, #0057AC 100%)";
               }}
             >
-              Get started
+              {t.getStarted}
             </Link>
             {/* Language menu for mobile */}
             <div className="flex flex-col gap-1 mt-4">
@@ -747,7 +753,7 @@ export default function Navbar() {
                   height={22}
                   style={{ display: "inline-block" }}
                 />
-                <span style={{ fontWeight: 600, color: "#003365", fontSize: 16 }}>Language</span>
+                <span style={{ fontWeight: 600, color: "#003365", fontSize: 16 }}>{t.language}</span>
                 <button
                   className="ml-auto"
                   style={{
@@ -801,14 +807,18 @@ export default function Navbar() {
                       padding: "0.5em 1em",
                       textAlign: "left",
                       cursor: "pointer",
-                      color: "#495867", // changed from #003365
+                      color: "#495867",
                       fontWeight: 500,
                       fontSize: 15,
                       transition: "color 0.2s"
                     }}
                     onMouseEnter={e => (e.currentTarget.style.color = "#0057AC")}
                     onMouseLeave={e => (e.currentTarget.style.color = "#495867")}
-                    onClick={() => setMenuOpen(false)}
+                    onClick={() => {
+                      localStorage.setItem("lang", "en");
+                      setMenuOpen(false);
+                      window.location.reload();
+                    }}
                   >
                     English
                   </button>
@@ -821,14 +831,18 @@ export default function Navbar() {
                       padding: "0.5em 1em",
                       textAlign: "left",
                       cursor: "pointer",
-                      color: "#495867", // changed from #003365
+                      color: "#495867",
                       fontWeight: 500,
                       fontSize: 15,
                       transition: "color 0.2s"
                     }}
                     onMouseEnter={e => (e.currentTarget.style.color = "#0057AC")}
                     onMouseLeave={e => (e.currentTarget.style.color = "#495867")}
-                    onClick={() => setMenuOpen(false)}
+                    onClick={() => {
+                      localStorage.setItem("lang", "fr");
+                      setMenuOpen(false);
+                      window.location.reload();
+                    }}
                   >
                     Français
                   </button>
@@ -841,7 +855,7 @@ export default function Navbar() {
                       padding: "0.5em 1em",
                       textAlign: "left",
                       cursor: "pointer",
-                      color: "#495867", // changed from #003365
+                      color: "#495867",
                       fontWeight: 500,
                       fontSize: 15,
                       transition: "color 0.2s"
@@ -861,7 +875,7 @@ export default function Navbar() {
                       padding: "0.5em 1em",
                       textAlign: "left",
                       cursor: "pointer",
-                      color: "#495867", // changed from #003365
+                      color: "#495867",
                       fontWeight: 500,
                       fontSize: 15,
                       transition: "color 0.2s"
@@ -881,7 +895,7 @@ export default function Navbar() {
                       padding: "0.5em 1em",
                       textAlign: "left",
                       cursor: "pointer",
-                      color: "#495867", // changed from #003365
+                      color: "#495867",
                       fontWeight: 500,
                       fontSize: 15,
                       transition: "color 0.2s"
@@ -901,7 +915,7 @@ export default function Navbar() {
                       padding: "0.5em 1em",
                       textAlign: "left",
                       cursor: "pointer",
-                      color: "#495867", // changed from #003365
+                      color: "#495867",
                       fontWeight: 500,
                       fontSize: 15,
                       transition: "color 0.2s"
@@ -921,7 +935,7 @@ export default function Navbar() {
                       padding: "0.5em 1em",
                       textAlign: "left",
                       cursor: "pointer",
-                      color: "#495867", // changed from #003365
+                      color: "#495867",
                       fontWeight: 500,
                       fontSize: 15,
                       transition: "color 0.2s"
@@ -941,7 +955,7 @@ export default function Navbar() {
                       padding: "0.5em 1em",
                       textAlign: "left",
                       cursor: "pointer",
-                      color: "#495867", // changed from #003365
+                      color: "#495867",
                       fontWeight: 500,
                       fontSize: 15,
                       transition: "color 0.2s"
@@ -961,7 +975,7 @@ export default function Navbar() {
                       padding: "0.5em 1em",
                       textAlign: "left",
                       cursor: "pointer",
-                      color: "#495867", // changed from #003365
+                      color: "#495867",
                       fontWeight: 500,
                       fontSize: 15,
                       transition: "color 0.2s"
@@ -981,7 +995,7 @@ export default function Navbar() {
                       padding: "0.5em 1em",
                       textAlign: "left",
                       cursor: "pointer",
-                      color: "#495867", // changed from #003365
+                      color: "#495867",
                       fontWeight: 500,
                       fontSize: 15,
                       transition: "color 0.2s"
@@ -990,7 +1004,7 @@ export default function Navbar() {
                     onMouseLeave={e => (e.currentTarget.style.color = "#495867")}
                     onClick={() => setMenuOpen(false)}
                   >
-                         አማርኛ (Amharic)
+                           አማርኛ (Amharic)
                   </button>
                   <button
                     style={{
@@ -1001,7 +1015,7 @@ export default function Navbar() {
                       padding: "0.5em 1em",
                       textAlign: "left",
                       cursor: "pointer",
-                      color: "#495867", // changed from #003365
+                      color: "#495867",
                       fontWeight: 500,
                       fontSize: 15,
                       transition: "color 0.2s"

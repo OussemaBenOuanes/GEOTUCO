@@ -1,8 +1,9 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import "../app/globals.css";
+import { footerTranslations } from "../translations/footer";
 
 export const FooterStyles = () => (
   <style jsx global>{`
@@ -32,6 +33,18 @@ export const FooterStyles = () => (
 );
 
 export default function Footer() {
+  const [language, setLanguage] = useState("en");
+  useEffect(() => {
+    let lang = localStorage.getItem("lang") || "en";
+    setLanguage(lang);
+    const handleStorage = (e: StorageEvent) => {
+      if (e.key === "lang" && e.newValue) setLanguage(e.newValue);
+    };
+    window.addEventListener("storage", handleStorage);
+    return () => window.removeEventListener("storage", handleStorage);
+  }, []);
+  const t = footerTranslations[language] || footerTranslations.en;
+
   return (
     <>
       <style global jsx>{`
@@ -74,7 +87,7 @@ export default function Footer() {
                 />
               </div>
               <div className="mb-4" style={{ color: "#fff" }}>
-                GeoTunisie Consulting: Hassle-free civil engineering consulting that teams love.
+                {t.companyDesc}
               </div>
               <div className="flex gap-3 mb-4">
                 {/* Social icons */}
@@ -128,7 +141,7 @@ export default function Footer() {
             {/* Links section */}
             <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 text-sm">
               <div>
-                <div className="font-semibold mb-2" style={{ color: "#fff", fontWeight: 600, fontSize: "1.15rem" }}>Product</div>
+                <div className="font-semibold mb-2" style={{ color: "#fff", fontWeight: 600, fontSize: "1.15rem" }}>{t.product}</div>
                 <ul className="space-y-1">
                   <li>
                     <Link
@@ -136,7 +149,7 @@ export default function Footer() {
                       className="footer-link"
                       style={{ color: "#fff" }}
                     >
-                      Structural Analysis
+                      {t.structuralAnalysis}
                     </Link>
                   </li>
                   <li>
@@ -145,7 +158,7 @@ export default function Footer() {
                       className="footer-link"
                       style={{ color: "#fff" }}
                     >
-                      Project Management
+                      {t.projectManagement}
                     </Link>
                   </li>
                   <li>
@@ -154,7 +167,7 @@ export default function Footer() {
                       className="footer-link"
                       style={{ color: "#fff" }}
                     >
-                      Site Development
+                      {t.siteDevelopment}
                     </Link>
                   </li>
                   <li>
@@ -163,50 +176,50 @@ export default function Footer() {
                       className="footer-link"
                       style={{ color: "#fff" }}
                     >
-                      Environmental Consulting
+                      {t.environmentalConsulting}
                     </Link>
                   </li>
                 </ul>
               </div>
               <div>
-                <div className="font-semibold mb-2" style={{ color: "#fff", fontWeight: 600, fontSize: "1.15rem" }}>Company</div>
+                <div className="font-semibold mb-2" style={{ color: "#fff", fontWeight: 600, fontSize: "1.15rem" }}>{t.company}</div>
                 <ul className="space-y-1">
                   <li>
-                    <Link href="/about" className="footer-link" style={{ color: "#fff" }}>About</Link>
+                    <Link href="/about" className="footer-link" style={{ color: "#fff" }}>{t.about}</Link>
                   </li>
                   <li>
-                    <Link href="/careers" className="footer-link" style={{ color: "#fff" }}>Careers</Link>
+                    <Link href="/careers" className="footer-link" style={{ color: "#fff" }}>{t.careers}</Link>
                   </li>
                   <li>
-                    <Link href="/contact" className="footer-link" style={{ color: "#fff" }}>Contact</Link>
+                    <Link href="/contact" className="footer-link" style={{ color: "#fff" }}>{t.contact}</Link>
                   </li>
                 </ul>
               </div>
               <div>
-                <div className="font-semibold mb-2" style={{ color: "#fff", fontWeight: 600, fontSize: "1.15rem" }}>Explore</div>
+                <div className="font-semibold mb-2" style={{ color: "#fff", fontWeight: 600, fontSize: "1.15rem" }}>{t.explore}</div>
                 <ul className="space-y-1">
                   <li>
-                    <Link href="/case-studies" className="footer-link" style={{ color: "#fff" }}>Case Studies</Link>
+                    <Link href="/case-studies" className="footer-link" style={{ color: "#fff" }}>{t.caseStudies}</Link>
                   </li>
                   <li>
-                    <Link href="/partners" className="footer-link" style={{ color: "#fff" }}>Partners</Link>
+                    <Link href="/partners" className="footer-link" style={{ color: "#fff" }}>{t.partners}</Link>
                   </li>
                   <li>
-                    <Link href="/blog" className="footer-link" style={{ color: "#fff" }}>Blog</Link>
+                    <Link href="/blog" className="footer-link" style={{ color: "#fff" }}>{t.blog}</Link>
                   </li>
                 </ul>
               </div>
               <div>
-                <div className="font-semibold mb-2" style={{ color: "#fff", fontWeight: 600, fontSize: "1.15rem" }}>Support</div>
+                <div className="font-semibold mb-2" style={{ color: "#fff", fontWeight: 600, fontSize: "1.15rem" }}>{t.support}</div>
                 <ul className="space-y-1">
                   <li>
-                    <Link href="/help-center" className="footer-link" style={{ color: "#fff" }}>Help Center</Link>
+                    <Link href="/help-center" className="footer-link" style={{ color: "#fff" }}>{t.helpCenter}</Link>
                   </li>
                   <li>
-                    <Link href="/docs" className="footer-link" style={{ color: "#fff" }}>Docs</Link>
+                    <Link href="/docs" className="footer-link" style={{ color: "#fff" }}>{t.docs}</Link>
                   </li>
                   <li>
-                    <Link href="/terms" className="footer-link" style={{ color: "#fff" }}>Terms</Link>
+                    <Link href="/terms" className="footer-link" style={{ color: "#fff" }}>{t.terms}</Link>
                   </li>
                 </ul>
               </div>
@@ -216,12 +229,12 @@ export default function Footer() {
           <div className="border-t border-gray-100 mt-8 pt-6 flex flex-col md:flex-row md:justify-between items-center text-xs gap-2"
             style={{ color: "#fff", borderColor: "#fff" }}>
             <div className="mb-2 md:mb-0 text-center">
-              &copy; 2003 - {new Date().getFullYear()} GEOTUCO — GeoTunisie Consulting
+              {t.copyright.replace("{year}", new Date().getFullYear())}
             </div>
             <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 items-center">
-              <Link href="/privacy-policy" className="footer-link" style={{ color: "#fff" }}>Privacy Policy</Link>
-              <Link href="/terms" className="footer-link" style={{ color: "#fff" }}>Terms</Link>
-              <Link href="/code-of-conduct" className="footer-link" style={{ color: "#fff" }}>Code of Conduct</Link>
+              <Link href="/privacy-policy" className="footer-link" style={{ color: "#fff" }}>{t.privacyPolicy}</Link>
+              <Link href="/terms" className="footer-link" style={{ color: "#fff" }}>{t.terms}</Link>
+              <Link href="/code-of-conduct" className="footer-link" style={{ color: "#fff" }}>{t.codeOfConduct}</Link>
             </div>
           </div>
         </div>

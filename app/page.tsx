@@ -7,34 +7,7 @@ import { FloatingWhatsApp } from 'react-floating-whatsapp';
 import { testimonials } from './constants/testimonials';
 import { carouselData } from './constants/carouselData';
 import { services } from './constants/services';
-
-// Translations object
-const translations = {
-  en: {
-    title: "Achieve Excellence in Civil Engineering",
-    description: "Innovative solutions for infrastructure, construction, and development. Partner with us for quality, safety, and sustainability.",
-    getStarted: "Get Started",
-    servicesTitle: "What Our Clients Say",
-    faqTitle: "Frequently Asked Questions",
-    faq: [
-      { question: "What services do you offer?", answer: "We provide structural analysis, project management, site development, and environmental consulting." },
-      { question: "How do I start a project with GEOTUCO?", answer: "Simply contact us and our team will guide you through the process." },
-      { question: "Do you work with both public and private sectors?", answer: "Yes, we serve a diverse range of clients across sectors." }
-    ]
-  },
-  fr: {
-    title: "Atteignez l'excellence en génie civil",
-    description: "Des solutions innovantes pour les infrastructures, la construction et le développement. Collaborez avec nous pour la qualité, la sécurité et la durabilité.",
-    getStarted: "Commencer",
-    servicesTitle: "Ce que disent nos clients",
-    faqTitle: "Questions Fréquemment Posées",
-    faq: [
-      { question: "Quels services proposez-vous ?", answer: "Nous fournissons des analyses structurelles, la gestion de projet, le développement de sites et le conseil environnemental." },
-      { question: "Comment démarrer un projet avec GEOTUCO ?", answer: "Contactez-nous simplement et notre équipe vous guidera tout au long du processus." },
-      { question: "Travaillez-vous avec les secteurs public et privé ?", answer: "Oui, nous servons une large gamme de clients dans tous les secteurs." }
-    ]
-  }
-};
+import { translations } from '../translations/translations';
 
 export default function Home() {
   const [language, setLanguage] = useState("en");
@@ -42,8 +15,12 @@ export default function Home() {
 
   // Detect browser language and set mobile state
   useEffect(() => {
-    const browserLang = navigator.language.startsWith("fr") ? "fr" : "en";
-    setLanguage(browserLang);
+    let lang = localStorage.getItem("lang");
+    if (!lang) {
+      lang = navigator.language.startsWith("fr") ? "fr" : "en";
+      localStorage.setItem("lang", lang);
+    }
+    setLanguage(lang);
     setIsMobile(typeof window !== "undefined" && window.innerWidth <= 768);
     const handleResize = () => setIsMobile(window.innerWidth <= 768);
     window.addEventListener("resize", handleResize);
@@ -485,8 +462,8 @@ export default function Home() {
           {services.map((service, idx) => (
             <ServiceCard
               key={idx}
-              title={service.title}
-              desc={service.desc}
+              title={t[`service${idx + 1}Title`] || service.title}
+              desc={t[`service${idx + 1}Desc`] || service.desc}
               href={service.href}
               emoji={service.emoji}
             />
@@ -536,12 +513,30 @@ export default function Home() {
         }}>
           <h3 style={{ color: '#2a4d69', marginBottom: '1.5rem' }}>{t.faqTitle}</h3>
           <ul style={{ listStyle: 'none', padding: 0, color: '#333', fontSize: '1.05rem' }}>
-            {t.faq.map((item, idx) => (
-              <li key={idx} style={{ marginBottom: '1rem' }}>
-                <b>{item.question}</b><br />
-                {item.answer}
-              </li>
-            ))}
+            {Array.isArray(t.faq)
+              ? t.faq.map((item: any, idx: number) => (
+                  <li key={idx} style={{ marginBottom: '1rem' }}>
+                    <b>{item.question}</b><br />
+                    {item.answer}
+                  </li>
+                ))
+              : (
+                <>
+                  <li>
+                    <b>{t.faq.q1}</b><br />
+                    {t.faq.a1}
+                  </li>
+                  <li>
+                    <b>{t.faq.q2}</b><br />
+                    {t.faq.a2}
+                  </li>
+                  <li>
+                    <b>{t.faq.q3}</b><br />
+                    {t.faq.a3}
+                  </li>
+                </>
+              )
+            }
           </ul>
         </section>
       </main>
