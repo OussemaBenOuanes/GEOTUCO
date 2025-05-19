@@ -32,7 +32,8 @@ export default function Navbar() {
     { label: t.services, slug: "services", children: [
         { label: t.geotechnicalEngineering, slug: "geotechnical-engineering" },
         { label: t.geotechnicalTests, slug: "geotechnical-tests" },
-        { label: t.training, slug: "training" }
+        { label: t.training, slug: "training" },
+        { label: t.geology, slug: "geology" } // Added Geology
       ]
     },
     { label: t.softwares, slug: "geoprog", children: [

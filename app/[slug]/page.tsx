@@ -149,6 +149,29 @@ export default async function DynamicPage({ params }: { params: Promise<{ slug: 
     );
   }
 
+  if (slug === "geology") {
+    return (
+      <>
+        <title>Geology | GEOTUCO</title>
+        <main style={{ padding: '2rem', fontFamily: 'sans-serif', maxWidth: 900, margin: '0 auto' }}>
+          <h1 style={{ fontSize: '2.2rem', color: '#2a4d69', fontWeight: 800, marginBottom: '2rem', textAlign: 'center' }}>
+            Geology
+          </h1>
+          <div style={{ color: '#444', fontSize: '1.15rem', marginBottom: '1.5rem', textAlign: 'center' }}>
+            Our Geology services provide expert analysis of rock formations, soil composition, and geological hazards to support your engineering and construction projects. We deliver detailed geological surveys, mapping, and risk assessments to ensure informed decision-making and project safety.
+          </div>
+          <ul style={{ color: '#4b5d67', fontSize: '1rem', maxWidth: 600, margin: '0 auto', lineHeight: 1.7 }}>
+            <li>✔️ Geological mapping and site characterization</li>
+            <li>✔️ Rock and soil sampling and analysis</li>
+            <li>✔️ Assessment of geological hazards (landslides, earthquakes, etc.)</li>
+            <li>✔️ Hydrogeological studies</li>
+            <li>✔️ Support for mining and tunneling projects</li>
+          </ul>
+        </main>
+      </>
+    );
+  }
+
   const service = pages[slug];
   if (!service) return notFound();
 
