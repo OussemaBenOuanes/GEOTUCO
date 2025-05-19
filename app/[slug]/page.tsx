@@ -2,6 +2,9 @@ import { notFound } from 'next/navigation';
 import { pages } from '../constants/pages';
 import Link from 'next/link';
 import ContactFormWithTitle from './ContactFormWithTitle';
+import React from 'react';
+import Geology from './Geology';
+import Training from './Training';
 
 export default async function DynamicPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -107,26 +110,7 @@ export default async function DynamicPage({ params }: { params: Promise<{ slug: 
   }
 
   if (slug === "training") {
-    return (
-      <>
-        <title>Training | GEOTUCO</title>
-        <main style={{ padding: '2rem', fontFamily: 'sans-serif', maxWidth: 900, margin: '0 auto' }}>
-          <h1 style={{ fontSize: '2.2rem', color: '#2a4d69', fontWeight: 800, marginBottom: '2rem', textAlign: 'center' }}>
-            Training
-          </h1>
-          <div style={{ color: '#444', fontSize: '1.15rem', marginBottom: '1.5rem', textAlign: 'center' }}>
-            GEOTUCO offers specialized training programs in geotechnical engineering, laboratory testing, and field investigation techniques. Our courses are designed for engineers, technicians, and students seeking to enhance their practical skills and theoretical knowledge in the geotechnical field.
-          </div>
-          <ul style={{ color: '#4b5d67', fontSize: '1rem', maxWidth: 600, margin: '0 auto', lineHeight: 1.7 }}>
-            <li>✔️ Hands-on training in soil and rock testing</li>
-            <li>✔️ Workshops on geotechnical investigation methods</li>
-            <li>✔️ Software training for geotechnical analysis</li>
-            <li>✔️ Customized courses for organizations and universities</li>
-            <li>✔️ Certification upon completion</li>
-          </ul>
-        </main>
-      </>
-    );
+    return <Training />;
   }
 
   if (slug === "softwares") {
@@ -150,26 +134,7 @@ export default async function DynamicPage({ params }: { params: Promise<{ slug: 
   }
 
   if (slug === "geology") {
-    return (
-      <>
-        <title>Geology | GEOTUCO</title>
-        <main style={{ padding: '2rem', fontFamily: 'sans-serif', maxWidth: 900, margin: '0 auto' }}>
-          <h1 style={{ fontSize: '2.2rem', color: '#2a4d69', fontWeight: 800, marginBottom: '2rem', textAlign: 'center' }}>
-            Geology
-          </h1>
-          <div style={{ color: '#444', fontSize: '1.15rem', marginBottom: '1.5rem', textAlign: 'center' }}>
-            Our Geology services provide expert analysis of rock formations, soil composition, and geological hazards to support your engineering and construction projects. We deliver detailed geological surveys, mapping, and risk assessments to ensure informed decision-making and project safety.
-          </div>
-          <ul style={{ color: '#4b5d67', fontSize: '1rem', maxWidth: 600, margin: '0 auto', lineHeight: 1.7 }}>
-            <li>✔️ Geological mapping and site characterization</li>
-            <li>✔️ Rock and soil sampling and analysis</li>
-            <li>✔️ Assessment of geological hazards (landslides, earthquakes, etc.)</li>
-            <li>✔️ Hydrogeological studies</li>
-            <li>✔️ Support for mining and tunneling projects</li>
-          </ul>
-        </main>
-      </>
-    );
+    return <Geology />;
   }
 
   const service = pages[slug];
